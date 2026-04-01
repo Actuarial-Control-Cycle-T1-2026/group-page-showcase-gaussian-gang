@@ -13,9 +13,15 @@ To ensure that senior management were well informed our team has:
   3. Presented aggregate estimates and ranges on expected loss, revenue and profit.
 
 The following study presents the methodology and results undertaken to achieve the three objectives outlined above.   
+
 (can talk about what the task was and give a little overview of our initial approach)
 
 # Data Cleaning and Exploratory Data Analysis
+All data used in this analysis was provided by SOA. These files were: 
+- [Historical Business Interruption Claims](srcsc-2026-claims-business-interruption.xlsx)
+- [Historical Cargo Loss Claims](srcsc-2026-claims-cargo.xlsx)
+- [Historical Workers' Compensation Claims](srcsc-2026-claims-workers-comp.xlsx)
+
 (talk about our code and the assumptions made here, as well as some key insights)
 
 # Risk Assessment
