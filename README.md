@@ -1,7 +1,53 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/FxAEmrI0)
 # Actuarial Theory and Practice A Assignment - 2026 SOA Research Challenge
-__"Testing"_
-> Testing 2.
+_by Sophie Vonwiller, Matthew Vucic and Savannah Worth_
+
+This page details our approach to the research challenge, the analysis we were able to draw from the data, and the final recommendations that we provided to the client.
+
+# Challenge Overview
+(can talk about what the task was and give a little overview of our initial approach)
+
+# Data Cleaning and Exploratory Data Analysis
+(talk about our code and the assumptions made here, as well as some key insights)
+
+# Risk Assessment
+(discuss our risk section)
+
+# Cargo Loss Analysis
+(talk about the code and key findings from the frequency, severity and GLM distribution fitting)
+
+# Business Interruption Analysis
+(talk about the code and key findings from the frequency, severity and GLM distribution fitting)
+
+# Equipment Failure Analysis
+(talk about the code and key findings from the frequency, severity and GLM distribution fitting)
+
+# Workers' Compensation Analysis
+(talk about the code and key findings from the frequency, severity and GLM distribution fitting)
+
+# Pricing 
+(talk about premium pricing for each hazard and final premium projections overall w/ calculations)
+
+# Stress Testing
+(describe our stress testing scenarios and calculations)
+
+# Assumptions
+(repeat of assumptions section from report)
+
+# Data
+(repeat of data section from report)
+
+# Final Recommendations
+(repeat of conclusion from report)
+
+
+
+
+
+
+
+
+
 
 _"Tell me and I forget. Teach me and I remember. Involve me and I learn." – Benjamin Franklin_
 
