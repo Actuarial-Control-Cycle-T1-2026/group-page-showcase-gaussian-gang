@@ -5,6 +5,14 @@ _by Sophie Vonwiller, Matthew Vucic and Savannah Worth_
 This page details our approach to the research challenge, the analysis we were able to draw from the data, and the final recommendations that we provided to the client.
 
 # Challenge Overview
+Our objective was to inform the senior management of Galaxy General Insurance Company (GGIC) on a suitable proposal in response to Cosmic Quarry Mining Corporation's (CQMC) request for space mining insurance coverage. More specifically, CQMC was seeking coverage for four hazard areas; Cargo Loss, Business Interruption, Equipment Failure and Workers' Compensation. 
+
+To ensure that senior management were well informed our team has: 
+  1. Conducted a thorough risk assessment of CQMC's current operations 
+  2. Designed suitable products for each hazard area tailorised to CQMC's risk exposure 
+  3. Presented aggregate estimates and ranges on expected loss, revenue and profit.
+
+The following study presents the methodology and results undertaken to achieve the three objectives outlined above.   
 (can talk about what the task was and give a little overview of our initial approach)
 
 # Data Cleaning and Exploratory Data Analysis
