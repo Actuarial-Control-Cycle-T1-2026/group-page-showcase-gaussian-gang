@@ -28,7 +28,7 @@ All data used in this analysis was provided by SOA. These files were:
 (discuss our risk section)
 
 # Cargo Loss Analysis
-(talk about the code and key findings from the frequency, severity and GLM distribution fitting)
+Hi
 
 # Business Interruption Analysis
 (talk about the code and key findings from the frequency, severity and GLM distribution fitting)
