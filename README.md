@@ -38,7 +38,7 @@ Hi
 
 **Claims Frequency**
 
-The claims frequency data for Business Interruption had a mean of 0.100 and a variance of 0.174, meaning that the data is over-dispersed. A histogram of the data shows that a large majority of policies never make a claim, and the amount of claims made decreases at a decreasing rate. A negative binomial distribution, known to handle over-dispersed data, was the best-fitting distribution. The ECDF produced by the negative binomial distribution was almost identical to that of the true data, and the points on the P-P plot were close to the guide line. The negative binomial distribution had the smallest AIC out of all of the distributions analysed, and gave a mean and variance of 0.101 and 0.184, respectively.
+The claims frequency data for Business Interruption had a mean of 0.100 and a variance of 0.174, meaning that the data is over-dispersed. A [histogram](https://github.com/Actuarial-Control-Cycle-T1-2026/group-page-showcase-gaussian-gang/blob/d00961cfb7690aba276caccda4000f03ba96eeeb/BI-F%20CDF) of the data shows that a large majority of policies never make a claim, and the amount of claims made decreases at a decreasing rate. A negative binomial distribution, known to handle over-dispersed data, was the best-fitting distribution. The ECDF produced by the negative binomial distribution was almost identical to that of the true data, and the points on the P-P plot were close to the guide line. The negative binomial distribution had the smallest AIC out of all of the distributions analysed, and gave a mean and variance of 0.101 and 0.184, respectively.
 
 ADD IMAGES
 
