@@ -38,11 +38,9 @@ Hi
 
 **Claims Frequency**
 
-The claims frequency data for Business Interruption had a mean of 0.100 and a variance of 0.174, meaning that the data is over-dispersed. A [histogram]() of the data shows that a large majority of policies never make a claim, and the amount of claims made decreases at a decreasing rate. A negative binomial distribution, known to handle over-dispersed data, was the best-fitting distribution. The [ECDF](BI-F_CDF.png) produced by the negative binomial distribution was almost identical to that of the true data, and the points on the [P-P]() plot were close to the guide line. The negative binomial distribution had the smallest AIC out of all of the distributions analysed, and gave a mean and variance of 0.101 and 0.184, respectively.
+The claims frequency data for Business Interruption had a mean of 0.100 and a variance of 0.174, meaning that the data is over-dispersed. A [histogram](BI-F_Hist.png) of the data shows that a large majority of policies never make a claim, and the amount of claims made decreases at a decreasing rate. A negative binomial distribution, known to handle over-dispersed data, was the best-fitting distribution. The [ECDF](BI-F_CDF.png) produced by the negative binomial distribution was almost identical to that of the true data, and the points on the [P-P](BI-F_P-P.png) plot were close to the guide line. The negative binomial distribution had the smallest AIC out of all of the distributions analysed, and gave a mean and variance of 0.101 and 0.184, respectively.
 
-ADD IMAGES
-
-A sample of the code for the negative binomial distribution is below.
+A sample of the code for testing the negative binomial distribution is below.
 ```{r}
 ##Option Three: Negative Binomial
 nbinomfit <- fitdist(bus_int_f$claim_count,"nbinom")
@@ -60,7 +58,36 @@ nbinomfit$estimate[2] + ((nbinomfit$estimate[2])^2)/nbinomfit$estimate[1]
 ```
 A negative binomial GLM was then fitted to the frequency data, using the covariates of Energy Backup Score, Supply Chain Index and Maintenance Frequency. All covariates, except Maintenance Frequency, were significant at 0.05.
 
-(put the code for this in the aggregate distribution)
+**Claims Severity**
+
+The Claims Severity data for Business Interruption had a mean of $309,750.9 and a standard deviation of $399,719.6. A [histogram] of the data shows that majority of claims are below $100,000 and that the number of claims above $100,000 remains reasonably constant in each cost bracket. A Pareto 4 distribution, known for its flexible tails, was the best distribution. The [histogram] comparison demonstrates that it has the same general shape as the historical claims data. The poor tail fit, underestimating severity, can be attributed to the lack of extreme historical claims. When there isn’t any extreme data, the model tends to underestimate the probability of extreme events occurring. As the Business Interruption product has a maximum claim limit, this underestimation will not pose a material risk to GGIC.
+
+A sample of the code for testing the Pareto 4 distribution is below.
+
+```{r}
+##Option Eight: Pareto 4
+par4fit<- fitdist(bus_int$claim_amount,"pareto4")
+#Comparing Histograms
+hist(bus_int$claim_amount,breaks=100,prob=TRUE,xlab="Claim Severity", main= "Histogram Business Interruption / Pareto 4")
+lines(xgrids,dpareto4(xgrids,min=par4fit$estimate[1],shape1=par4fit$estimate[2], shape2=par4fit$estimate[3],scale=par4fit$estimate[4]),col=2)
+#Comparing ECDF
+cdfcomp(par4fit)
+#P-P Plot
+plot(ppareto4(bus_int$claim_amount, min=par4fit$estimate[1],shape1=par4fit$estimate[2], shape2=par4fit$estimate[3],scale=par4fit$estimate[4]), empiricals(bus_int$claim_amount),
+     xlab= "Theoretical probability", ylab= "Sample probability", main="P-P Plot Business Interruption / Pareto 4")
+abline(0,1,col=3)
+#Goodness-of-Fit Stats
+gofstat(par4fit)
+#K-S Test gave 0.0881
+#AIC gave 260,264.2
+#Mean
+mpareto4(order =1, min=par4fit$estimate[1],shape1=par4fit$estimate[2], shape2=par4fit$estimate[3],scale=par4fit$estimate[4])
+#Mean of $421,167.3
+```
+
+A generalised pareto GLM was fit to the severity data using the covariates Energy Backup Score and Safety Compliance. Note that no covariates were significant for this dataset, but these were the most significant covariates. The GLM was used to estimate the minimum and shape1 parameters, while the original Pareto 4 fit was the source of the shape2 and scale parameters. This allowed the model to account for current risks while also fitting the tail to historical data.
+
+**Aggregate Distribution**
 
 
 ## Equipment Failure Analysis
