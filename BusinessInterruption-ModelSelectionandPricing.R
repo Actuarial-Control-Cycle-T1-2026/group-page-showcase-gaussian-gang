@@ -1,4 +1,17 @@
 #Ensure data cleaning code has been run
+#Frequency
+library(ggplot2)
+#All claims histograms
+ggplot(bus_int_f, aes (x=claim_count)) +
+  geom_bar()+
+  labs(title = "Histogram of Business Interruption Frequency",
+       x= "Claims per Policy",
+       y= "Frequency")
+ggplot(bus_int, aes (x=claim_count)) +
+  geom_bar()+
+  labs(title = "Histogram of Business Interruption Frequency",
+       x= "Claims per Policy",
+       y= "Frequency")
 ###Model Selection - Claims Frequency###
 library(MASS)
 library(actuar)
