@@ -27,16 +27,19 @@ All data used in this analysis was provided by SOA. These files were:
 # Risk Assessment
 (discuss our risk section)
 
-# Cargo Loss Analysis
+# Distribution Selection
+The following sections detail the distribution selection process for each hazard. To select the most appropriate distributions for claim frequency and severity, several distributions were naively fitted using MLE and compared against historical claims data using a range of statistical methods, including empirical CDFs, P-P plots and AIC comparisons. The selected distributions were then used to fit GLMs, so that CQMC's current risks and exposures were considered, with an exposure offset equal to 1. Frequency and severity distributions were combined to create an aggregate loss distribution.
+
+## Cargo Loss Analysis
 Hi
 
-# Business Interruption Analysis
+## Business Interruption Analysis
 (talk about the code and key findings from the frequency, severity and GLM distribution fitting)
 
-# Equipment Failure Analysis
+## Equipment Failure Analysis
 (talk about the code and key findings from the frequency, severity and GLM distribution fitting)
 
-# Workers' Compensation Analysis
+## Workers' Compensation Analysis
 (talk about the code and key findings from the frequency, severity and GLM distribution fitting)
 
 # Pricing 
