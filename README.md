@@ -34,7 +34,16 @@ The following sections detail the distribution selection process for each hazard
 Hi
 
 ## Business Interruption Analysis
-(talk about the code and key findings from the frequency, severity and GLM distribution fitting)
+The entire code used to select the best fitting frequency and severity distributions and create the final aggregate loss distribution for Business Interruption can be found [here](). (ADD LINK HERE).
+The claims frequency data for Business Interruption had a mean of 0.100 and a variance of 0.174, meaning that the data is over-dispersed. A histogram of the data shows that a large majority of policies never make a claim, and the amount of claims made decreases at a decreasing rate. A negative binomial distribution, known to handle over-dispersed data, was the best-fitting distribution. The ECDF produced by the negative binomial distribution was almost identical to that of the true data, and the points on the P-P plot were close to the guide line. The negative binomial distribution had the smallest AIC out of all of the distributions analysed, and gave a mean and variance of 0.101 and 0.184, respectively.
+
+A sample of the code for the negative binomial distribution is below.
+Also link images.
+
+A negative binomial GLM was then fitted to the frequency data, using the covariates of Energy Backup Score, Supply Chain Index and Maintenance Frequency. All covariates, except Maintenance Frequency, were significant at 0.05.
+
+(put the code for this in the aggregate distribution)
+
 
 ## Equipment Failure Analysis
 (talk about the code and key findings from the frequency, severity and GLM distribution fitting)
