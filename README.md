@@ -36,11 +36,28 @@ Hi
 ## Business Interruption Analysis
 >The entire code used to select the best fitting frequency and severity distributions and create the final aggregate loss distribution for Business Interruption can be found [here](https://github.com/Actuarial-Control-Cycle-T1-2026/group-page-showcase-gaussian-gang/blob/a7f8b7d71e66e964c8bb73492fbc292b2cb7c47f/Business%20Interruption%20-%20Model%20Selection%20and%20Pricing.R).
 
+**Claims Frequency**
+
 The claims frequency data for Business Interruption had a mean of 0.100 and a variance of 0.174, meaning that the data is over-dispersed. A histogram of the data shows that a large majority of policies never make a claim, and the amount of claims made decreases at a decreasing rate. A negative binomial distribution, known to handle over-dispersed data, was the best-fitting distribution. The ECDF produced by the negative binomial distribution was almost identical to that of the true data, and the points on the P-P plot were close to the guide line. The negative binomial distribution had the smallest AIC out of all of the distributions analysed, and gave a mean and variance of 0.101 and 0.184, respectively.
 
-A sample of the code for the negative binomial distribution is below.
-Also link images.
+ADD IMAGES
 
+A sample of the code for the negative binomial distribution is below.
+```{r}
+##Option Three: Negative Binomial
+nbinomfit <- fitdist(bus_int_f$claim_count,"nbinom")
+#Comparing Empirical CDF
+cdfcomp(nbinomfit)
+#Almost an exact fit
+#P-P Plot
+plot(pnbinom(bus_int_f$claim_count, size=nbinomfit$estimate[1], mu=nbinomfit$estimate[2]), empirical(bus_int_f$claim_count),
+     xlab= "Theoretical Probability", ylab= "Sample Probability", main="P-P Plot Business Interruption / Negative Binomial")
+abline(0,1,col=3)
+#Mean and variance from Negative Binomial
+nbinomfit$estimate[2]
+nbinomfit$estimate[2] + ((nbinomfit$estimate[2])^2)/nbinomfit$estimate[1]
+#Mean of 0.101 and variance of 0.184
+```
 A negative binomial GLM was then fitted to the frequency data, using the covariates of Energy Backup Score, Supply Chain Index and Maintenance Frequency. All covariates, except Maintenance Frequency, were significant at 0.05.
 
 (put the code for this in the aggregate distribution)
