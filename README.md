@@ -34,11 +34,11 @@ The following sections detail the distribution selection process for each hazard
 Hi
 
 ## Business Interruption Analysis
->The entire code used to select the best fitting frequency and severity distributions and create the final aggregate loss distribution for Business Interruption can be found [here](https://github.com/Actuarial-Control-Cycle-T1-2026/group-page-showcase-gaussian-gang/blob/a7f8b7d71e66e964c8bb73492fbc292b2cb7c47f/Business%20Interruption%20-%20Model%20Selection%20and%20Pricing.R).
+>The entire code used to select the best fitting frequency and severity distributions and create the final aggregate loss distribution for Business Interruption can be found [here](BusinessInterruption-ModelSelectionandPricing.R).
 
 **Claims Frequency**
 
-The claims frequency data for Business Interruption had a mean of 0.100 and a variance of 0.174, meaning that the data is over-dispersed. A [histogram](https://github.com/Actuarial-Control-Cycle-T1-2026/group-page-showcase-gaussian-gang/blob/d00961cfb7690aba276caccda4000f03ba96eeeb/BI-F%20CDF) of the data shows that a large majority of policies never make a claim, and the amount of claims made decreases at a decreasing rate. A negative binomial distribution, known to handle over-dispersed data, was the best-fitting distribution. The ECDF produced by the negative binomial distribution was almost identical to that of the true data, and the points on the P-P plot were close to the guide line. The negative binomial distribution had the smallest AIC out of all of the distributions analysed, and gave a mean and variance of 0.101 and 0.184, respectively.
+The claims frequency data for Business Interruption had a mean of 0.100 and a variance of 0.174, meaning that the data is over-dispersed. A [histogram]() of the data shows that a large majority of policies never make a claim, and the amount of claims made decreases at a decreasing rate. A negative binomial distribution, known to handle over-dispersed data, was the best-fitting distribution. The [ECDF](BI-F_CDF.png) produced by the negative binomial distribution was almost identical to that of the true data, and the points on the [P-P]() plot were close to the guide line. The negative binomial distribution had the smallest AIC out of all of the distributions analysed, and gave a mean and variance of 0.101 and 0.184, respectively.
 
 ADD IMAGES
 
