@@ -12,6 +12,9 @@ ggplot(bus_int, aes (x=claim_count)) +
   labs(title = "Histogram of Business Interruption Frequency",
        x= "Claims per Policy",
        y= "Frequency")
+#Severity
+#All claims
+hist(bus_int$claim_amount, main="Histogram of Claim Severity",xlab="Claim Amount")
 ###Model Selection - Claims Frequency###
 library(MASS)
 library(actuar)
