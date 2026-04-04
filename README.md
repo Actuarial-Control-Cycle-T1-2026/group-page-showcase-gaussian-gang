@@ -60,7 +60,7 @@ A negative binomial GLM was then fitted to the frequency data, using the covaria
 
 **Claims Severity**
 
-The Claims Severity data for Business Interruption had a mean of $309,750.9 and a standard deviation of $399,719.6. A [histogram] of the data shows that majority of claims are below $100,000 and that the number of claims above $100,000 remains reasonably constant in each cost bracket. A Pareto 4 distribution, known for its flexible tails, was the best distribution. The [histogram] comparison demonstrates that it has the same general shape as the historical claims data. The poor tail fit, underestimating severity, can be attributed to the lack of extreme historical claims. When there isn’t any extreme data, the model tends to underestimate the probability of extreme events occurring. As the Business Interruption product has a maximum claim limit, this underestimation will not pose a material risk to GGIC.
+The Claims Severity data for Business Interruption had a mean of $309,750.9 and a standard deviation of $399,719.6. A [histogram](BI-S_Hist.png) of the data shows that majority of claims are below $100,000 and that the number of claims above $100,000 remains reasonably constant in each cost bracket. A Pareto 4 distribution, known for its flexible tails, was the best distribution. The [histogram](BI-S_HistComp.png) comparison demonstrates that it has the same general shape as the historical claims data. The poor tail fit, underestimating severity, can be attributed to the lack of extreme historical claims. When there isn’t any extreme data, the model tends to underestimate the probability of extreme events occurring. As the Business Interruption product has a maximum claim limit, this underestimation will not pose a material risk to GGIC.
 
 A sample of the code for testing the Pareto 4 distribution is below.
 
@@ -89,6 +89,40 @@ A generalised pareto GLM was fit to the severity data using the covariates Energ
 
 **Aggregate Distribution**
 
+The aggregate distribution used for Business Interruption pricing was created by first fitting the frequency and severity GLMs to CQMC's current resources and exposures, then simulating 1,000,000 possible claims frequencies. The output of these simulations were fed into the claims severity simulations to produce 1,000,000 simulations of the aggregate loss. The claims severity simulations were adjusted to account for the product features that we had designed: a deductible of $20,000 and a maximum claim limit of $1,500,000. The final 1,000,000 simulations created an empirical loss distribution with a mean of $6,105,802 and a standard deviation of $3,688,022. The [distribution] has an extensive right tail, with the possibility for extremely large values. For example, the 97.5% VaR is $14,597,556. Due to this, GGIC may wish to consider an excess-of-loss reinsurance policy. 
+
+An excerpt from the simulation code is below.
+```{r}
+rnbinomFunc <- function(number,mu,size) { 
+  x <- rnbinom(number,mu=mu,size=size)
+  x <- ifelse(x >4, 4, x)
+  x <- ifelse(x <0, 0,x)
+  return(sum(x))
+} 
+#Note that there is a deductible of $20,000 and a max claim limit of $1,500,000
+rparFunc <- function(claimFreq,mu_par,alpha_par,shape2,scale) { 
+  if (claimFreq==0) return(0)
+  x <- rpareto4(claimFreq,min=mu_par,shape1=alpha_par,shape2=par4fit$estimate["shape2"],scale=par4fit$estimate["scale"])
+  x <- ifelse(x > 1500000, 1500000,x)
+  x <- ifelse(x < 20000,0,x)
+  return(sum(x))
+} 
+
+set.seed(1)
+all_claim_counts <- list()
+all_claim_sizes <- list()
+totalLosses <- numeric(1000000)
+
+for (i in seq(1,1000000,1)) { 
+  claim_counts_list <- mapply(rnbinomFunc,predictorDf$number, 
+                              predictorDf$mu_freq,predictorDf$size)
+  all_claim_counts[[i]] <- unlist(claim_counts_list)
+  claim_sizes_list <- mapply(rparFunc,claim_counts_list, 
+                             predictorDf$mu_par,predictorDf$alpha_par)
+  all_claim_sizes[[i]] <- unlist(claim_sizes_list)
+  totalLosses[i] <- sum(unlist(claim_sizes_list)) 
+}
+```
 
 ## Equipment Failure Analysis
 (talk about the code and key findings from the frequency, severity and GLM distribution fitting)
