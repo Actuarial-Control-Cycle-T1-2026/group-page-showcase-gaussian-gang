@@ -125,38 +125,102 @@ for (i in seq(1,1000000,1)) {
 ```
 
 ## Equipment Failure Analysis
->The entire code used to select the best fitting frequency and severity distributions and create the final aggregate loss distribution for Equipment Failure can be found [here]().
+>The entire code used to select the best fitting frequency and severity distributions and create the final aggregate loss distribution for Equipment Failure can be found [here](Equipment_Failure-Model_Selection_and_Pricing.R).
 
 **Claims Frequency**
 
-The claims frequency data for Equipment Failure had a mean of 0.078 and a variance of 0.082, meaning that the data is slightly over-dispersed. A [histogram]() of the data shows that a large majority of policies never make a claim, and the amount of claims made decreases at a decreasing rate. A negative binomial distribution was the best-fitting distribution. Other distributions tested include Binomial and Poisson. The [ECDF]() produced by the negative binomial distribution was an exact fit to the true data, and the points on the [P-P plot]() were extremely close to the guideline. The negative binomial distribution had the smallest AIC out of all of the distributions analysed, and gave a mean and variance of 0.078 and 0.082, respectively. Hence, the negative binomial distribution was the most appropriate choice.
+The claims frequency data for Equipment Failure had a mean of 0.078 and a variance of 0.082, meaning that the data is slightly over-dispersed. A [histogram](EF-F_Hist.png) of the data shows that a large majority of policies never make a claim, and the amount of claims made decreases at a decreasing rate. A negative binomial distribution was the best-fitting distribution. Other distributions tested include Binomial and Poisson. The [ECDF](EF-F_ECDF.png) produced by the negative binomial distribution was an exact fit to the true data, and the points on the [P-P plot](EF-F_P-P.png) were extremely close to the guideline. The negative binomial distribution had the smallest AIC out of all of the distributions analysed, and gave a mean and variance of 0.078 and 0.082, respectively. Hence, the negative binomial distribution was the most appropriate choice.
 
 
 A sample of the code for testing the Negative Binomial distribution is below.
 ```{r}
-
+##Option Three: Negative Binomial
+enbinomfit <-fitdist(equipment_failure_f$claim_count,"nbinom")
+#Comparing Empirical CDF
+cdfcomp(enbinomfit)
+#Almost an exact fit
+#P-P Plot
+plot(pnbinom(equipment_failure_f$claim_count, size=enbinomfit$estimate[1], mu=enbinomfit$estimate[2]), eempirical(equipment_failure_f$claim_count),
+     xlab= "Theoretical probability", ylab= "Sample probability", main="P-P Plot Equipment Failure / Negative Binomial")
+abline(0,1,col=3)
+#Goodness-of-Fit Stats
+gofstat(enbinomfit)
+#AIC gave 52,561.3
+#Mean and variance from Negative Binomial
+enbinomfit$estimate[2]
+enbinomfit$estimate[2] + ((enbinomfit$estimate[2])^2)/enbinomfit$estimate[1]
+#Mean of 0.078 and variance of 0.082
 ```
 A negative binomial GLM was then fitted to the frequency data, using the covariates of Equipment Type, Equipment Age, Maintenance Intensity and Usage Intensity. All of these covariates were significant, with the equipment type ‘Flux Rider’ being the only covariate not significant at 0.001. 
 
 **Claims Severity**
 
-The Claims Severity data for Equipment Failure had a mean of $87,349.9 and a standard deviation of $61,610.67. A [histogram]() of the data shows that majority of claims are between $50,000 and $100,000, and the overall shape of the claims distribution is similar to a highly-right skewed bell curve with a large tail. A log-normal distribution, suitable for positive, right-skewed and right-tailed data, was found to be the closest distribution. Other distributions tested include Weibull, Gamma, Normal, Exponential and Pareto. The [histogram comparison]() and [P-P plot]() demonstrate that the distribution is almost an identical fit to the historical claims data provided.
+The Claims Severity data for Equipment Failure had a mean of $87,349.9 and a standard deviation of $61,610.67. A [histogram](EF-S_Hist.png) of the data shows that majority of claims are between $50,000 and $100,000, and the overall shape of the claims distribution is similar to a highly-right skewed bell curve with a large tail. A log-normal distribution, suitable for positive, right-skewed and right-tailed data, was found to be the closest distribution. Other distributions tested include Weibull, Gamma, Normal, Exponential and Pareto. The [histogram comparison](EF-S_HistComp.png) and [P-P plot](EF-S_P-P.png) demonstrate that the distribution is almost an identical fit to the historical claims data provided.
 
 A sample of the code for testing the Log-Normal distribution is below.
 
 ```{r}
-
+##Option Four: Log-Normal
+#Fit
+elnormfit<-fitdist(equipment_failure$claim_amount,"lnorm")
+#Comparing Histograms
+hist(equipment_failure$claim_amount, breaks=100, prob=T, xlab="Claim Severity", main = "Histogram Equipment Failure / Log Normal")
+lines(exgrids, dlnorm(exgrids,elnormfit$estimate[1], elnormfit$estimate[2]),col=2)
+#Almost exactly the same
+#Comparing Empirical CDF
+cdfcomp(elnormfit)
+#P-P Plot
+plot(plnorm(equipment_failure$claim_amount, elnormfit$estimate[1], elnormfit$estimate[2]), eempiricals(equipment_failure$claim_amount),
+     xlab= "Theoretical probability", ylab= "Sample probability", main="P-P Plot Equipment Failure / Log Normal", cex=0.45)
+abline(0,1,col=3)
+#Goodness-of-Fit Stats
+gofstat(elnormfit)
+#K-S Test gave 0.0099
+#AIC gave 194,345.2
+#Mean and variance from Log-Normal
+exp(elnormfit$estimate[1]+(1/2)*elnormfit$estimate[2])
+#Mean of 98,058.53
+(exp(elnormfit$estimate[2])-1)*exp(2*elnormfit$estimate[1]+elnormfit$estimate[2])
+#Variance of 7,786,027,952
 ```
 
 A log-normal GLM was then fitted to the severity data using the covariates Equipment Age, Equipment Type and Usage Intensity. All of these covariates are significant at 0.001. Thus, the claims data was modelled by finding a suitable distribution and then using historical dependencies to estimate current risks, and hence create a loss distribution.
 
 **Aggregate Distribution**
 
-The aggregate distribution used for Equipment Failure pricing was created by first fitting the frequency and severity GLMs to CQMC's current resources and exposures, then simulating 1,000,000 possible claims frequencies. The output of these simulations were fed into the claims severity simulations to produce 1,000,000 simulations of the aggregate loss. The claims severity simulations were adjusted to account for the product features that we had designed: a deductible of $10,000 and a maximum claim limit of $800,000. The final 1,000,000 simulations created an empirical loss [distribution]() that is almost symmetrical and has light tails on both sides. It has an expected value of $105,834,521, a standard deviation of $3,514,315 and a 97.5% VaR of $112,811,760. As the standard deviation is small compared to the mean, the tail risk can be managed by prudent reviews of premiums and claim limits.
+The aggregate distribution used for Equipment Failure pricing was created by first fitting the frequency and severity GLMs to CQMC's current resources and exposures, then simulating 1,000,000 possible claims frequencies. The output of these simulations were fed into the claims severity simulations to produce 1,000,000 simulations of the aggregate loss. The claims severity simulations were adjusted to account for the product features that we had designed: a deductible of $10,000 and a maximum claim limit of $800,000. The final 1,000,000 simulations created an empirical loss [distribution](EF-Agg.png) that is almost symmetrical and has light tails on both sides. It has an expected value of $105,834,521, a standard deviation of $3,514,315 and a 97.5% VaR of $112,811,760. As the standard deviation is small compared to the mean, the tail risk can be managed by prudent reviews of premiums and claim limits.
 
 An excerpt from the simulation code is below.
 ```{r}
+ernbinomFunc <- function(number,mu,size) { 
+ x <- rnbinom(number,mu=mu,size=size)
+ x <- ifelse(x >3, 3, x)
+ x <- ifelse(x <0, 0,x)
+ return(sum(x))
+} 
+#Note that there is a deductible of $10,000 and a max claim limit of $800,000
+erlnormFunc <- function(claimFreq,mean,sd) { 
+  if (claimFreq==0) return(0)
+  x <- rlnorm(claimFreq,meanlog=mean,sdlog=sd)
+  x <- ifelse(x > 800000, 800000,x)
+  x <- ifelse(x < 10000,0,x)
+  return(sum(x))
+} 
 
+set.seed(1)
+eall_claim_counts <- list()
+eall_claim_sizes <- list()
+etotalLosses <- numeric(1000000)
+
+for (i in seq(1,1000000,1)) { 
+  claim_counts_list <- mapply(ernbinomFunc,epredictorDf$number, 
+                                   epredictorDf$mu_freq,epredictorDf$size)
+  eall_claim_counts[[i]] <- unlist(claim_counts_list)
+  claim_sizes_list <- mapply(erlnormFunc,claim_counts_list, 
+                                   epredictorDf$mean_log,epredictorDf$sd_log)
+  eall_claim_sizes[[i]] <- unlist(claim_sizes_list)
+  etotalLosses[i] <- sum(unlist(claim_sizes_list)) 
+  }
 ```
 
 ## Workers' Compensation Analysis
