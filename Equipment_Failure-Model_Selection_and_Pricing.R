@@ -1,4 +1,14 @@
 #Ensure that data cleaning code has been run first
+#Frequency
+library(ggplot2)
+ggplot(equipment_failure_f, aes (x=claim_count)) +
+  geom_bar()+
+  labs(title = "Histogram of Equipment Failure Frequency",
+       x= "Claims per Policy",
+       y= "Frequency")
+#Severity
+#All claims
+hist(equipment_failure$claim_amount, main="Histogram of Equipment Failure Claim Severity", xlab="Claim Amount")
 #Finding frequency distribution for entire population
 library(MASS)
 library(fitdistrplus)
