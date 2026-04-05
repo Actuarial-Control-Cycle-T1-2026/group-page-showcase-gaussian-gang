@@ -38,9 +38,9 @@ Hi
 
 **Claims Frequency**
 
-The claims frequency data for Business Interruption had a mean of 0.100 and a variance of 0.174, meaning that the data is over-dispersed. A [histogram](BI-F_Hist.png) of the data shows that a large majority of policies never make a claim, and the amount of claims made decreases at a decreasing rate. A negative binomial distribution, known to handle over-dispersed data, was the best-fitting distribution. The [ECDF](BI-F_CDF.png) produced by the negative binomial distribution was almost identical to that of the true data, and the points on the [P-P](BI-F_P-P.png) plot were close to the guide line. The negative binomial distribution had the smallest AIC out of all of the distributions analysed, and gave a mean and variance of 0.101 and 0.184, respectively.
+The claims frequency data for Business Interruption had a mean of 0.100 and a variance of 0.174, meaning that the data is over-dispersed. A [histogram](BI-F_Hist.png) of the data shows that a large majority of policies never make a claim, and the amount of claims made decreases at a decreasing rate. A negative binomial distribution, known to handle over-dispersed data, was the best-fitting distribution. Other distributions tested include Binomial and Poisson. The [ECDF](BI-F_CDF.png) produced by the negative binomial distribution was almost identical to that of the true data, and the points on the [P-P](BI-F_P-P.png) plot were close to the guide line. The negative binomial distribution had the smallest AIC out of all of the distributions analysed, and gave a mean and variance of 0.101 and 0.184, respectively.
 
-A sample of the code for testing the negative binomial distribution is below.
+A sample of the code for testing the Negative Binomial distribution is below.
 ```{r}
 ##Option Three: Negative Binomial
 nbinomfit <- fitdist(bus_int_f$claim_count,"nbinom")
@@ -60,7 +60,7 @@ A negative binomial GLM was then fitted to the frequency data, using the covaria
 
 **Claims Severity**
 
-The Claims Severity data for Business Interruption had a mean of $309,750.9 and a standard deviation of $399,719.6. A [histogram](BI-S_Hist.png) of the data shows that majority of claims are below $100,000 and that the number of claims above $100,000 remains reasonably constant in each cost bracket. A Pareto 4 distribution, known for its flexible tails, was the best distribution. The [histogram](BI-S_HistComp.png) comparison demonstrates that it has the same general shape as the historical claims data. The poor tail fit, underestimating severity, can be attributed to the lack of extreme historical claims. When there isn’t any extreme data, the model tends to underestimate the probability of extreme events occurring. As the Business Interruption product has a maximum claim limit, this underestimation will not pose a material risk to GGIC.
+The Claims Severity data for Business Interruption had a mean of $309,750.9 and a standard deviation of $399,719.6. A [histogram](BI-S_Hist.png) of the data shows that majority of claims are below $100,000 and that the number of claims above $100,000 remains reasonably constant in each cost bracket. A Pareto 4 distribution, known for its flexible tails, was the best distribution. Other distributions tested include Weibull, Gamma, Log-Normal, Exponential, Burr, Inverse Gamma and Generalised Beta. Most of these distributions were found through the actuar package in R. The [histogram](BI-S_HistComp.png) comparison demonstrates that it has the same general shape as the historical claims data. The poor tail fit, underestimating severity, can be attributed to the lack of extreme historical claims. When there isn’t any extreme data, the model tends to underestimate the probability of extreme events occurring. As the Business Interruption product has a maximum claim limit, this underestimation will not pose a material risk to GGIC.
 
 A sample of the code for testing the Pareto 4 distribution is below.
 
@@ -125,7 +125,39 @@ for (i in seq(1,1000000,1)) {
 ```
 
 ## Equipment Failure Analysis
-(talk about the code and key findings from the frequency, severity and GLM distribution fitting)
+>The entire code used to select the best fitting frequency and severity distributions and create the final aggregate loss distribution for Equipment Failure can be found [here]().
+
+**Claims Frequency**
+
+The claims frequency data for Equipment Failure had a mean of 0.078 and a variance of 0.082, meaning that the data is slightly over-dispersed. A [histogram]() of the data shows that a large majority of policies never make a claim, and the amount of claims made decreases at a decreasing rate. A negative binomial distribution was the best-fitting distribution. Other distributions tested include Binomial and Poisson. The [ECDF]() produced by the negative binomial distribution was an exact fit to the true data, and the points on the [P-P plot]() were extremely close to the guideline. The negative binomial distribution had the smallest AIC out of all of the distributions analysed, and gave a mean and variance of 0.078 and 0.082, respectively. Hence, the negative binomial distribution was the most appropriate choice.
+
+
+A sample of the code for testing the Negative Binomial distribution is below.
+```{r}
+
+```
+A negative binomial GLM was then fitted to the frequency data, using the covariates of Equipment Type, Equipment Age, Maintenance Intensity and Usage Intensity. All of these covariates were significant, with the equipment type ‘Flux Rider’ being the only covariate not significant at 0.001. 
+
+**Claims Severity**
+
+The Claims Severity data for Equipment Failure had a mean of $87,349.9 and a standard deviation of $61,610.67. A [histogram]() of the data shows that majority of claims are between $50,000 and $100,000, and the overall shape of the claims distribution is similar to a highly-right skewed bell curve with a large tail. A log-normal distribution, suitable for positive, right-skewed and right-tailed data, was found to be the closest distribution. Other distributions tested include Weibull, Gamma, Normal, Exponential and Pareto. The [histogram comparison]() and [P-P plot]() demonstrate that the distribution is almost an identical fit to the historical claims data provided.
+
+A sample of the code for testing the Log-Normal distribution is below.
+
+```{r}
+
+```
+
+A log-normal GLM was then fitted to the severity data using the covariates Equipment Age, Equipment Type and Usage Intensity. All of these covariates are significant at 0.001. Thus, the claims data was modelled by finding a suitable distribution and then using historical dependencies to estimate current risks, and hence create a loss distribution.
+
+**Aggregate Distribution**
+
+The aggregate distribution used for Equipment Failure pricing was created by first fitting the frequency and severity GLMs to CQMC's current resources and exposures, then simulating 1,000,000 possible claims frequencies. The output of these simulations were fed into the claims severity simulations to produce 1,000,000 simulations of the aggregate loss. The claims severity simulations were adjusted to account for the product features that we had designed: a deductible of $10,000 and a maximum claim limit of $800,000. The final 1,000,000 simulations created an empirical loss [distribution]() that is almost symmetrical and has light tails on both sides. It has an expected value of $105,834,521, a standard deviation of $3,514,315 and a 97.5% VaR of $112,811,760. As the standard deviation is small compared to the mean, the tail risk can be managed by prudent reviews of premiums and claim limits.
+
+An excerpt from the simulation code is below.
+```{r}
+
+```
 
 ## Workers' Compensation Analysis
 (talk about the code and key findings from the frequency, severity and GLM distribution fitting)
