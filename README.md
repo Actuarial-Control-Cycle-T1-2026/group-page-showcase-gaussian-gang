@@ -14,8 +14,6 @@ To ensure that senior management were well informed our team has:
 
 The following study presents the methodology and results undertaken to achieve the three objectives outlined above.   
 
-(can talk about what the task was and give a little overview of our initial approach)
-
 # Data Cleaning and Exploratory Data Analysis
 All data used in this analysis was provided by SOA. These files were: 
 - [Historical Business Interruption Claims](srcsc-2026-claims-business-interruption.xlsx)
@@ -29,7 +27,7 @@ Throughout the data cleaning, we have relied upon the data description as a sour
 - Strings with additional characters on the end were assumed to be typos and were adjusted to match the examples in the data description. 
 - Where claim amounts appear to be around 100 times too high, it was assumed that the data had been inputted in cents instead of dollars, and was thus divided by 100 to correct this.
 
-The data cleaning code can be found here for [Cargo Loss](), [Business Interruption](), [Equipment Failure]() and [Workers' Compensation]().
+The data cleaning code can be found here for [Cargo Loss](), [Business Interruption](Business_Interruption-Data_Cleaning_and_EDA.R), [Equipment Failure](Equipment_Failure-Data_Cleaning_and_EDA.R) and [Workers' Compensation]().
 
 ^REQUIRE DATA CLEANING CODE FOR CL AND WC
 
@@ -236,10 +234,37 @@ for (i in seq(1,1000000,1)) {
 (talk about the code and key findings from the frequency, severity and GLM distribution fitting)
 
 # Pricing 
-(talk about premium pricing for each hazard and final premium projections overall w/ calculations)
+The premiums for each hazard were calculated using the standard deviation principle, $\mu + \alpha*\sigma$, where μ is the average loss, calculated from the empirical aggregate loss distribution, σ is the standard deviation of the loss distribution, and α was selected to achieve a given profit as a percentage of total average losses. This method accounts for risk and affordability by targeting a small percentage of profit. Premiums increase proportionally to increases in exposure and will increase annually in line with expected inflation. Premiums will be continually monitored and refined with experience, as it is not GGIC’s intent to unreasonably exploit risk. Any data collected in this process will be stored securely to avoid sensitive leakage.
+
+## Cargo Loss
+## Business Interruption
+For Business Interruption ,the target profit was 3%. This profit was chosen to meet GGIC's costs of doing business, plus provide some profits. The α which is suitable for this profit target is α=0.05. As business interruption has a mean total loss of $6,105,802 and a standard deviation of $3,688,022, this produced a final premium of $6,290,203 per year, based on current risks, exposures and economic conditions. This premium makes up 0.01% of CQMC’s total profit in 2174, so it is extremely inexpensive. The table below contains the present value of profit projections for GICC, including the value of profit if claims are made at the mean and a 95% probability range for claims losses.
+
+| PV of Profit | Lower Bound | Expected | Upper Bound |
+| :--- | :--- | :--- | :--- |
+| Profit - 1 Year | -$8,354,696.72 | $164,598.28 | $6,163,769.17 |
+| Profit - 3 Years | -$25,631,960.17 | $503,957.44 | $18,908,512.78 |
+| Profit - 10 Years | -$85,461,228.61 | $1,676,300.57 | $63,037,355.56 |
+
+## Equipment Failure
+For Equipment Failure, the target profit was 2.5%. This is a reasonable percentage to cover overhead expenses while still allowing GGIC to retain profits or issue dividends to shareholders. The α which meets this target profit is α=0.76. As equipment failure has a mean total loss of $105,834,251 and a standard deviation of $3,514,315, this produced a final premium of $108,505,130 per year, which makes up 0.18% of CQMC’s total profit in 2174. The table below describes the expected present value of profit over the short, medium and long-term, and provides 95% probability ranges for the projected profits. 
+
+| PV of Profit | Lower Bound | Expected | Upper Bound |
+| :--- | :--- | :--- | :--- |
+| Profit - 1 Year | -$4,672,508.26 | $2,327,630.64 | $9,154,003.79 |
+| Profit - 3 Years | -$14,351,895.78 | $7,123,479.08 | $28,065,766.73 |
+| Profit - 10 Years | -$47,916,718.29 | $23,682,493.62 | $93,504,385.02 |
+
+## Workers' Compensation
+## Aggregate Profit Projections
+
 
 # Stress Testing
 (describe our stress testing scenarios and calculations)
+
+## Scenario 1: 
+## Scenario 2:
+## Scenario 3:
 
 # Assumptions
 (repeat of assumptions section from report)
