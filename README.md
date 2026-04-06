@@ -236,6 +236,8 @@ for (i in seq(1,1000000,1)) {
 # Pricing 
 The premiums for each hazard were calculated using the standard deviation principle, $\mu + \alpha*\sigma$, where μ is the average loss, calculated from the empirical aggregate loss distribution, σ is the standard deviation of the loss distribution, and α was selected to achieve a given profit as a percentage of total average losses. This method accounts for risk and affordability by targeting a small percentage of profit. Premiums increase proportionally to increases in exposure and will increase annually in line with expected inflation. Premiums will be continually monitored and refined with experience, as it is not GGIC’s intent to unreasonably exploit risk. Any data collected in this process will be stored securely to avoid sensitive leakage.
 
+After premiums have been selected, final profits were caculated in a [spreadsheet]() combining all four hazards. To calculate this, we assumed that premiums were all received at the beginning of the year, claims were received in the middle of the year on average and claims are immediately paid out. We also estimated inflation and interest rates using a mean regression. The final profit was a sum of retained earnings + annually inflated premiums + half a year of interest on premium and retained profit + inflated claims losses + half a year of interest on the remaining profit.
+
 ## Cargo Loss
 ## Business Interruption
 For Business Interruption ,the target profit was 3%. This profit was chosen to meet GGIC's costs of doing business, plus provide some profits. The α which is suitable for this profit target is α=0.05. As business interruption has a mean total loss of $6,105,802 and a standard deviation of $3,688,022, this produced a final premium of $6,290,203 per year, based on current risks, exposures and economic conditions. This premium makes up 0.01% of CQMC’s total profit in 2174, so it is extremely inexpensive. The table below contains the present value of profit projections for GICC, including the value of profit if claims are made at the mean and a 95% probability range for claims losses.
@@ -263,7 +265,83 @@ For Equipment Failure, the target profit was 2.5%. This is a reasonable percenta
 (describe our stress testing scenarios and calculations)
 
 ## Scenario 1: 
-## Scenario 2:
+## Scenario 2: Management Response to Poor Financial Conditions
+In 2178 there is an unexpected spike in inflation. GGIC has increased their premiums in line with expected inflation, but claims costs increase in line with true inflation. CQMC takes extensive cost-cutting measures, at the expense of equipment and infrastructure maintenance, and outsources core business activities. This causes increases to the expected losses from BI and EF, because there is increased third-party operational risk due to reliance on vendors, and the lack of maintenance has made CQMC’s equipment more prone to breakdowns, which may eventually increase the risk of worker injury.  
+
+| Profit PV | 4 Yrs Stressed | 4 Yrs Unstressed | 10 Yrs Stressed | 10 Yrs Unstressed |
+| :---: | :---: | :--: | :---: | :---: |
+| Lower Bound | -$10.6Bn | -$10.2Bn | -$25.4Bn | -$25.0Bn |
+| Average | $0.2Bn | $0.6Bn | $1.2Bn | $1.6Bn |
+| Higher Bound | $12.9Bn | $13.2Bn | $32.5Bn | $32.8Bn |
+
+The table above shows that, on average, GGIC will lose $400 million from this stressor, but will remain profitable, so there is no drastic need for action. However, if claims losses are high, GGIC should consider increasing premiums, decreasing maximum claims limits or purchasing reinsurance, so that a reserve is available to absorb losses from shocks.
+
+Note that this scenario was designed to test GGIC’s ability to withstand poor management decisions in the face of economic stress. The key inputs that were altered as part of this scenario include equipment maintenance being half as frequent, changes to the proportion of inputs sourced externally and the emergency power systems, and increase in equipment age and usage. Furthermore, as this scenario takes place 3 years into the lifespan of the product, a significant reserve has built up to be able to absorb this shock. In earlier years, when this reserve is not yet available, GGIC may become unprofitable from a shock of this magnitude.
+
+These values were calculated by 1) adjusting the existing aggregate loss distribution code to change the resource inputs for Business Interruption and Equipment Failure, and 2) adjusting the inflation for all hazards in the final profit calculation [spreadsheet](). A sample of the code for change 1) in Business Interruption is below.
+
+```{r}
+##Stress Test 2##
+#Maintenance Frequency has halved
+stresshelionisMFreq <- ((24*365)/1260.17)/2
+stressbayesiaMFreq <- ((24*365)/872.6744)/2
+stressorynMFreq <- ((24*365)/345.9302)/2
+
+
+stresshelionisDf <- data_frame(system="Helionis",
+                         number=helmines,
+                         energy_backup_score=4.5,
+                         supply_chain_index=0.93,
+                         maintenance_freq=stresshelionisMFreq,
+                         safety_compliance=mean(bus_int$safety_compliance),
+                         exposure=1)
+stressbayesiaDf <- data_frame(system="Bayesia",
+                        number=baymines,
+                        energy_backup_score=4.5,
+                        supply_chain_index=0.93,
+                        maintenance_freq=stressbayesiaMFreq,
+                        safety_compliance=mean(bus_int$safety_compliance),
+                        exposure=1)
+stressorynDf <- data_frame(system="Oryn",
+                     number=orymines,
+                     energy_backup_score=4.5,
+                     supply_chain_index=0.93,
+                     maintenance_freq=stressorynMFreq,
+                     safety_compliance=mean(bus_int$safety_compliance),
+                     exposure=1)
+```
+``` {r}
+rnbinomFunc <- function(number,mu,size) { 
+  x <- rnbinom(number,mu=mu,size=size)
+  x <- ifelse(x >4, 4, x)
+  x <- ifelse(x <0, 0,x)
+  return(sum(x))
+} 
+#Note that there is a deductible of $20,000 and a max claim limit of $1,500,000
+rparFunc <- function(claimFreq,mu_par,alpha_par,shape2,scale) { 
+  if (claimFreq==0) return(0)
+  x <- rpareto4(claimFreq,min=mu_par,shape1=alpha_par,shape2=par4fit$estimate["shape2"],scale=par4fit$estimate["scale"])
+  x <- ifelse(x > 1500000, 1500000,x)
+  x <- ifelse(x < 20000,0,x)
+  return(sum(x))
+} 
+
+set.seed(1)
+stress_claim_counts <- list()
+stress_claim_sizes <- list()
+stresstotalLosses <- numeric(1000000)
+
+for (i in seq(1,1000000,1)) { 
+  claim_counts_list <- mapply(rnbinomFunc,stresspredictorDf$number, 
+                              stresspredictorDf$mu_freq,stresspredictorDf$size)
+  stress_claim_counts[[i]] <- unlist(claim_counts_list)
+  claim_sizes_list <- mapply(rparFunc,claim_counts_list, 
+                             stresspredictorDf$mu_par,stresspredictorDf$alpha_par)
+  stress_claim_sizes[[i]] <- unlist(claim_sizes_list)
+  stresstotalLosses[i] <- sum(unlist(claim_sizes_list)) 
+}
+```
+
 ## Scenario 3:
 
 # Assumptions
