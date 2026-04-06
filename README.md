@@ -236,7 +236,7 @@ for (i in seq(1,1000000,1)) {
 # Pricing 
 The premiums for each hazard were calculated using the standard deviation principle, $\mu + \alpha*\sigma$, where μ is the average loss, calculated from the empirical aggregate loss distribution, σ is the standard deviation of the loss distribution, and α was selected to achieve a given profit as a percentage of total average losses. This method accounts for risk and affordability by targeting a small percentage of profit. Premiums increase proportionally to increases in exposure and will increase annually in line with expected inflation. Premiums will be continually monitored and refined with experience, as it is not GGIC’s intent to unreasonably exploit risk. Any data collected in this process will be stored securely to avoid sensitive leakage.
 
-After premiums have been selected, final profits were caculated in a [spreadsheet]() combining all four hazards. To calculate this, we assumed that premiums were all received at the beginning of the year, claims were received in the middle of the year on average and claims are immediately paid out. We also estimated inflation and interest rates using a mean regression. The final profit was a sum of retained earnings + annually inflated premiums + half a year of interest on premium and retained profit + inflated claims losses + half a year of interest on the remaining profit.
+After premiums have been selected, final profits were caculated in a [spreadsheet](Aggregate_Profit_Projections.xlsx) combining all four hazards. To calculate this, we assumed that premiums were all received at the beginning of the year, claims were received in the middle of the year on average and claims are immediately paid out. We also estimated inflation and interest rates using a mean regression. The final profit was a sum of retained earnings + annually inflated premiums + half a year of interest on premium and retained profit + inflated claims losses + half a year of interest on the remaining profit.
 
 ## Cargo Loss
 ## Business Interruption
@@ -278,7 +278,7 @@ The table above shows that, on average, GGIC will lose $400 million from this st
 
 Note that this scenario was designed to test GGIC’s ability to withstand poor management decisions in the face of economic stress. The key inputs that were altered as part of this scenario include equipment maintenance being half as frequent, changes to the proportion of inputs sourced externally and the emergency power systems, and increase in equipment age and usage. Furthermore, as this scenario takes place 3 years into the lifespan of the product, a significant reserve has built up to be able to absorb this shock. In earlier years, when this reserve is not yet available, GGIC may become unprofitable from a shock of this magnitude.
 
-These values were calculated by 1) adjusting the existing aggregate loss distribution code to change the resource inputs for Business Interruption and Equipment Failure, and 2) adjusting the inflation for all hazards in the final profit calculation [spreadsheet](). A sample of the code for change 1) in Business Interruption is below.
+These values were calculated by 1) adjusting the existing aggregate loss distribution code to change the resource inputs for Business Interruption and Equipment Failure, and 2) adjusting the inflation for all hazards in the final profit calculation [spreadsheet](Scenario_Test2.xlsx). A sample of the code for change 1) in Business Interruption is below.
 
 ```{r}
 ##Stress Test 2##
