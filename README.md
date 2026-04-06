@@ -22,7 +22,16 @@ All data used in this analysis was provided by SOA. These files were:
 - [Historical Cargo Loss Claims](srcsc-2026-claims-cargo.xlsx)
 - [Historical Workers' Compensation Claims](srcsc-2026-claims-workers-comp.xlsx)
 
-(talk about our code and the assumptions made here, as well as some key insights)
+Throughout the data cleaning, we have relied upon the data description as a source of truth. The key elements undertaken in the data cleaning process were: 
+- Minimum and maximum bounds set within the data description were used to cap any values outside of this range (with the exception of maximum values in claim amounts). 
+- NA values within claim counts were assumed to be 0. All other NA’s were removed. 
+- Negative values were adjusted to be positive. 
+- Strings with additional characters on the end were assumed to be typos and were adjusted to match the examples in the data description. 
+- Where claim amounts appear to be around 100 times too high, it was assumed that the data had been inputted in cents instead of dollars, and was thus divided by 100 to correct this.
+
+The data cleaning code can be found here for [Cargo Loss](), [Business Interruption](), [Equipment Failure]() and [Workers' Compensation]().
+
+^REQUIRE DATA CLEANING CODE FOR CL AND WC
 
 # Risk Assessment
 (discuss our risk section)
