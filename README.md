@@ -27,7 +27,7 @@ Throughout the data cleaning, we have relied upon the data description as a sour
 - Strings with additional characters on the end were assumed to be typos and were adjusted to match the examples in the data description. 
 - Where claim amounts appear to be around 100 times too high, it was assumed that the data had been inputted in cents instead of dollars, and was thus divided by 100 to correct this.
 
-The data cleaning code can be found here for [Cargo Loss](), [Business Interruption](Business_Interruption-Data_Cleaning_and_EDA.R), [Equipment Failure](Equipment_Failure-Data_Cleaning_and_EDA.R) and [Workers' Compensation](Workers Compensation - Data Cleaning and EDA.R).
+The data cleaning code can be found here for [Cargo Loss](), [Business Interruption](Business_Interruption-Data_Cleaning_and_EDA.R), [Equipment Failure](Equipment_Failure-Data_Cleaning_and_EDA.R) and [Workers' Compensation](Workers_Compensation_Data_Cleaning_and_EDA.R).
 
 ^REQUIRE DATA CLEANING CODE FOR CL 
 
