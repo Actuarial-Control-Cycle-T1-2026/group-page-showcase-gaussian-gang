@@ -38,7 +38,52 @@ The data cleaning code can be found here for [Cargo Loss](), [Business Interrupt
 The following sections detail the distribution selection process for each hazard. To select the most appropriate distributions for claim frequency and severity, several distributions were naively fitted using MLE and compared against historical claims data using a range of statistical methods, including empirical CDFs, P-P plots and AIC comparisons. The selected distributions were then used to fit GLMs, so that CQMC's current risks and exposures were considered, with an exposure offset equal to 1. Frequency and severity distributions were combined to create an aggregate loss distribution.
 
 ## Cargo Loss Analysis
-Hi
+
+For claim frequency, the mean was 0.25 claims, and variance was 0.36. The best fitting distribution was Negative Binomial. A histogram of the data shows that a large majority of policies never make a claim, and the amount of claims made decreases at a decreasing rate. A negative binomial distribution, known to handle over-dispersed data, was the best-fitting distribution. Other distributions tested include Binomial and Poisson. 
+
+A negative binomial GLM was then fit to the frequency data. For the negative binomial GLM, the statistically significant variables were pilot experience, route type, cargo value, and weight. 
+
+**Claims Frequency**
+
+A sample of the code for testing the Negative Binomial distribution is below.
+```{r}
+fitNegBinomial <- fitdist(cargo_freq$claim_count, "nbinom", method = "mle")
+gofstat(fitNegBinomial)
+cdfcomp(fitNegBinomial, xlab = "claim_count")
+
+sizeNB <- fitNegBinomial$estimate["size"]
+muNB <- fitNegBinomial$estimate["mu"]
+
+cdfcomp(fitNegBinomial, xlab = "claim_count")
+
+frequencyModel <- glm.nb(claim_count ~ container_type + pilot_experience + route_risk + offset(log(exposure)), data = cargo_freq)
+```
+**Claims Severity**
+
+For claim severity, the mean was $7,788,328, and standard deviation was $22, 859, 713. The log normal distribution was chosen. 
+
+A log-normal GLM was then fit to the cargo loss severity data. The statistically significant variables for the log normal GLM were max weight, solar radiation, debris density, and route risk. 
+
+A sample of the code for testing the Lognormal distribution is below.
+```{r}
+fitLnorm <- fitdist(combined_freq_sev$claim_amount, "lnorm", method = "mle")
+gofstat(fitLnorm)
+plot(fitLnorm)
+
+meanL <- fitLnorm$estimate["meanlog"]
+sdL <- fitLnorm$estimate["sdlog"]
+
+cdfcomp(fitLnorm, xlab = "claim_amount")
+
+severityModel <- glm(log(claim_amount) ~ container_type + solar_radiation + debris_density + route_risk, family=gaussian, data=combined_freq_sev)
+```
+**Aggregate Distribution**
+
+To simulate the aggregate loss distribution for Cargo Loss, the exposure for CQMC was first established. This involved determining and estimating the value of features used within the frequency and severity GLMs. These were deerived from the the exposure data and context provided within the encyclopedia. Pilot experience was set to the mean of the claims frequency data for all systems. Route risk was set based on the asteroid and solar context of each system, i.e., HC was attributed a low value due to low solar activity, and an outer asteroid belt.
+
+For each system, the parameters for the GLMs of both frequency and severity were then predicted, using the estimated features. Following this, using monte carlo simulation, the frequency was simulated for each policy (i.e., each container within each solar system), followed by the severity of each of the simulated claims. Summing the results provides the total loss distribution, which is displayed here.
+
+The total loss distribution produced had a mean loss of $14,084,596,613 and a standard deviation of $1,696,016,956. The total loss is slightly positively skewed, with a median of $1,696,016,956. The 95% VaR is $16,991,852,635 and the expected shortfall above the 99th percentile is $19,089,376,617.  
 
 ## Business Interruption Analysis
 >The entire code used to select the best fitting frequency and severity distributions and create the final aggregate loss distribution for Business Interruption can be found [here](BusinessInterruption-ModelSelectionandPricing.R).
