@@ -427,6 +427,16 @@ for (i in seq(1,1000000,1)) {
 
 ## Scenario 3:
 
+This scenario considers an extreme macroeconomic environment, where inflation and risk-free rates reach extreme levels. It is generally accepted that inflation and risk-free rates move together, as governments will often respond to changes in inflation by either increasing or decreasing the overnight lending rate. During a scenario in which inflation and the risk-free rate move together, there is a minimal impact on profit. This is because the increase in the risk-free rate offsets the increase in inflation, i.e., premiums and costs are both inflated by higher rates, however, then discounted by a higher rate too. The primary stress occurs when inflation move significantly upwards to 10%, while the risk-free rate remains stagnant. This may occur during a major hyperinflationary environment, where monetary policy is ineffective due to the issuance of large volumes of debt. 
+
+| PV of Profit | Lower Bound | Expected | Upper Bound |
+|---|---|---|---|
+| Profit - 1 Year | -$2,415,481,459 | $192,261,841 | $3,246,789,981 |
+| Profit - 3 Years | -$7,329,036,286 | $6,826,184,201 | $9,886,843,155 |
+| Profit - 10 Years | -$23,810,520,826 | $29,521,285,681 | $32,400,930,155 |
+
+In the table above, there is significant damage to average profit during an extreme inflation environment. The average 10 year profit falls from $1.6 billion to -$5.4 billion. In addition to this, the range increases to [-44 billion, 40 billion], which exposes GGIC to significantly more risk.
+
 # Assumptions
 (repeat of assumptions section from report)
 
