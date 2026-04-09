@@ -60,6 +60,8 @@ frequencyModel <- glm.nb(claim_count ~ container_type + pilot_experience + route
 ```
 **Claims Severity**
 
+**Claims Frequency**
+
 For claim severity, the mean was $7,788,328, and standard deviation was $22, 859, 713. The log normal distribution was chosen. 
 
 A log-normal GLM was then fit to the cargo loss severity data. The statistically significant variables for the log normal GLM were max weight, solar radiation, debris density, and route risk. 
@@ -84,6 +86,42 @@ To simulate the aggregate loss distribution for Cargo Loss, the exposure for CQM
 For each system, the parameters for the GLMs of both frequency and severity were then predicted, using the estimated features. Following this, using monte carlo simulation, the frequency was simulated for each policy (i.e., each container within each solar system), followed by the severity of each of the simulated claims. Summing the results provides the total loss distribution, which is displayed here.
 
 The total loss distribution produced had a mean loss of $14,084,596,613 and a standard deviation of $1,696,016,956. The total loss is slightly positively skewed, with a median of $1,696,016,956. The 95% VaR is $16,991,852,635 and the expected shortfall above the 99th percentile is $19,089,376,617.  
+
+A sample of the code for the aggregate loss distribution is visible below.
+```{r}
+totalLosses <- numeric(1000000)
+
+rnbinomFunc <- function(no_containers, mu, size) {
+  x <- rnbinom(no_containers, mu = mu, size = size)
+  x <- ifelse(x > 5, 5, x)
+  x <- ifelse(x < 0, 0, x)
+  
+  return(sum(x))
+} 
+
+rlnormFunc <- function(claimFreq, mean, sd) {
+  if (claimFreq == 0) {
+    return(0)
+  }
+  x <- rlnorm(claimFreq, meanlog = mean, sdlog = sd)
+  
+  x <- ifelse(x > 680000000, 680000000, x)
+  x <- ifelse(x < 31000, 31000, x)
+  return(sum(x))
+} 
+
+totalLosses <- numeric(100000)
+set.seed(1)
+for (i in seq(1, 100000, 1)) {
+  predictorDf$claimFreq <- mapply(rnbinomFunc, predictorDf$no_containers, predictorDf$mu_freq, predictorDf$size)
+  predictorDf$claimSize <- mapply(rlnormFunc, predictorDf$claimFreq, predictorDf$mean_log, predictorDf$sd_log)
+  totalLosses[i] <- sum(predictorDf$claimSize)
+}
+
+hist(totalLosses,
+     main = "Total Loss Distribution",
+     xlab = "Total Loss")
+```
 
 ## Business Interruption Analysis
 >The entire code used to select the best fitting frequency and severity distributions and create the final aggregate loss distribution for Business Interruption can be found [here](BusinessInterruption-ModelSelectionandPricing.R).
