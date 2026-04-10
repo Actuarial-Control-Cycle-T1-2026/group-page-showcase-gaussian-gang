@@ -218,6 +218,9 @@ VaR_99 <- quantile(totalLosses, probs = 0.99)
 VaR_5 <- quantile(totalLosses, probs = 0.05)
 ES99 <- mean(totalLosses[totalLosses > VaR_99])
 
+# Scenario 1
+quantile(totalLosses, probs = 0.997)
+
 alpha <- (1.05*meanTL - meanTL)/sqrt(varTL)
 premium <- meanTL + alpha*sqrt(varTL)
 
