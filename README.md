@@ -491,7 +491,15 @@ The target profit was set at 2% due to CQMC’s investment in growing its safety
 
 
 ## Aggregate Profit Projections
+> All calculations for the Aggregate Profit Projections were performed [here](Aggregate_Profit_Projections.xlsx).
 
+The table below displays GGIC's profit projections with relation to CQMC's purchased products across the short, medium and long-term. A 95% range of claims losses is included, as well as the mean claims losses.
+
+| | 1 Year | 3 Years | 10 Years | 
+|---: | ---: | ---: | ---: |
+| Profit - Higher Costs | -2,471,123,162 | -7,565,179,375 | -25,037,172,388 |
+| Profit - Average Costs | 145,401,342 | 454,411,680 | 1,620,159,120 |
+| Profit - Lower Costs | 3,210,153,984 | 9,847,796,832 | 32,843,853,333 |
 
 # Stress Testing
 ## Scenario 1: Multi-system communication outage
