@@ -366,6 +366,7 @@ To ensure both the probability mass of the lump sum payment and the continuous n
 To derive the severity distribution, first the benefit that would’ve been paid under the new proposed product was derived using the available historical data and information provided by CQMC. This entailed using CQMC average salaries by occupation and claim length to determine weekly payments. If an individual’s claim length was greater than 2 years, it was assumed the individual was permanently impaired and thus received the lump sum payment only.  
 
 The CQMC average salary assigned to each occupation in the historical data are outlined below. 
+
 | Historical Occupation | CQMC Salary | Additional Notes |
 | :--- | :--- | :--- |
 | Engineer | $95,000 | - |
