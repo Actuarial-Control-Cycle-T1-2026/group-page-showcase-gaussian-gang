@@ -30,7 +30,24 @@ Throughout the data cleaning, we have relied upon the data description as a sour
 The data cleaning code can be found here for [Cargo Loss](CargoLoss_Data_cleaning.R), [Business Interruption](Business_Interruption-Data_Cleaning_and_EDA.R), [Equipment Failure](Equipment_Failure-Data_Cleaning_and_EDA.R) and [Workers' Compensation](Workers_Compensation_Data_Cleaning_and_EDA.R).
 
 # Risk Assessment
-(discuss our risk section)
+
+This section assesses the risks inherent to the nature and location of CQMC’s operations. 
+
+**Key differences in risk profile across solar systems**
+
+HC has low solar flare activity and predictable solar winds, which reduces the likelihood of multi-asset radiation related claims. The primary risk is the asteroid clusters, which can lead to navigational and communication disruptions. BS experiences greater levels of solar radiation, which increases the likelihood of radiation related injuries, as well as electrical damage to cargo and equipment. The inner planet’s thin magnetosphere reduces protection. OD presents the greatest tail risk. Low luminosity and unpredictable asteroids threaten cargo, vessels and personnel.  Equipment and personnel are targeted by radiation.  
+
+**Correlated Risk Scenarios**
+
+Scenario 1 - Asteroid collision into cargo during travel. This will result in loss or damaging of cargo and injury or death to personnel.  
+
+Scenario 2 - Large scale solar activity, resulting in high doses of radiation. This will impact electrical systems, resulting in EF and navigation disruption for cargo. Employee health also harmed.
+
+Scenario 3 - Contractionary macroeconomic conditions. This will impact CQMC through higher interest rates and reduced production/revenue.
+
+**Identification and ranking of risks by hazard area across solar systems**
+
+**Scenario Testing**
 
 # Distribution Selection
 The following sections detail the distribution selection process for each hazard. To select the most appropriate distributions for claim frequency and severity, several distributions were naively fitted using MLE and compared against historical claims data using a range of statistical methods, including empirical CDFs, P-P plots and AIC comparisons. The selected distributions were then used to fit GLMs, so that CQMC's current risks and exposures were considered, with an exposure offset equal to 1. Frequency and severity distributions were combined to create an aggregate loss distribution.
@@ -597,7 +614,7 @@ In the table above, there is significant damage to average profit during an extr
 (repeat of data section from report)
 
 # Final Recommendations
-(repeat of conclusion from report)
+We recommend that GGIC offer CQMC the products outlined within the report, to cover the four hazards that CQMC faces across HC, BS and OD. These products have been designed to reflect the unique risks and resources of each solar system and have been priced such that they are affordable for CQMC, yet profitable for GGIC. Assumptions, risk appetites and pricing should be continually monitored into the future to ensure that this product remains valuable for both parties.  
 
 
 
