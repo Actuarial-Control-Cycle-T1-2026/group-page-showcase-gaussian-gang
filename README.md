@@ -450,7 +450,7 @@ for(i in 1:100000){
     }
   totalLosses[i] <- portfolio_loss
 }
-``
+```
 The [aggregate loss distribution]() produced an expected value of $24,807,746 and a standard deviation of $4,308,317. The distribution is roughly a bell-shaped curve, with light tails which are attributable to the proposed limitations on claim length and payments. The 99% VaR, $35,438,000, was within 3 standard deviations of the mean. 
 
 # Pricing 
