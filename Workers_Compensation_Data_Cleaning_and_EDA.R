@@ -325,6 +325,7 @@ ggplot(workers_comp_freq, aes(x = claim_count)) +
   xlab("Claim Count per Policy") + 
   ylab("Frequency") + 
   theme_minimal()
+ggsave("Histogram_of_WC_Frequency.png")
 
 mean(workers_comp_freq$claim_count) # 0.01420102
 var(workers_comp_freq$claim_count) # 0.01437515
@@ -388,6 +389,7 @@ ggplot(workers_comp_weekly, aes(x = weekly_benefit)) +
   xlab("Claim Amount") + 
   ylab("Frequency") + 
   theme_minimal()
+ggsave("Histogram_WC_New_Weekly_Benefit.png")
 
 # Examine distribution by Solar System 
 workers_comp_sev_eps <- workers_comp_weekly %>% filter(solar_system == "Epsilon")
