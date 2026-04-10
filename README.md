@@ -342,7 +342,8 @@ chisq.test(obs_freq,
 ```
 
 A negative binomial GLM was fitted to the frequency data using the covariates of occupation category and gravity level. This required mapping occupations recorded in the history data to CQMC departments. The mapping is outlined in the table below. 
-| Historical Occupation  | CQMC Department        |
+
+| Historical Occupation | CQMC Department |
 | :---: | :---: |
 | Engineer | Extraction Operations |
 | Maintenance Staff | Extraction Operations |
@@ -367,14 +368,14 @@ To derive the severity distribution, first the benefit that would’ve been paid
 The CQMC average salary assigned to each occupation in the historical data are outlined below. 
 | Historical Occupation | CQMC Salary | Additional Notes |
 | :---: | :---: | :---: |
-| Engineer | $95,000 | |
-| Maintenance Staff | $65,000 | |
-| Drill Operator | $60,000 | |
-| Scientist | $120,000 | |
-| Safety Officer | $80,000 | |
+| Engineer | $95,000 | - |
+| Maintenance Staff | $65,000 | - |
+| Drill Operator | $60,000 | - |
+| Scientist | $120,000 | - |
+| Safety Officer | $80,000 | - |
 | Administrator | $93,750 | Average of HR, IT, Legal, and Finance & Accounting salaries |
 | Spacecraft Operator | $85,000 | Average salary of navigation officers |
-| Executive | $500,000 | |
+| Executive | $500,000 | - |
 | Technology Officer | $75,000 | Average salary of robotics technicians |
 | Planetary Operations | $81,250 | Average salary across exploration and extraction operations |
 | Manager | $150,000 | Average salary of Director |
