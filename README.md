@@ -342,19 +342,19 @@ chisq.test(obs_freq,
 ```
 
 A negative binomial GLM was fitted to the frequency data using the covariates of occupation category and gravity level. This required mapping occupations recorded in the history data to CQMC departments. The mapping is outlined in the table below. 
-| Historical Occupation   | CQMC Department        |
+| Historical Occupation  | CQMC Department        |
 |------------------------|------------------------|
-| Engineer               | Extraction Operations  |
-| Maintenance Staff      | Extraction Operations  |
-| Drill Operator         | Extraction Operations  |
-| Scientist              | Exploration Operations |
-| Safety Officer         | Environmental & Safety |
-| Administrator          | Administration         |
-| Spacecraft Operator    | Spacecraft Operations  |
-| Executive              | Management             |
-| Technology Officer     | Extraction Operations  |
-| Planetary Operations   | Extraction Operations  |
-| Manager                | Administration         |
+| Engineer | Extraction Operations |
+| Maintenance Staff | Extraction Operations |
+| Drill Operator | Extraction Operations |
+| Scientist | Exploration Operations |
+| Safety Officer | Environmental & Safety |
+| Administrator | Administration |
+| Spacecraft Operator | Spacecraft Operations |
+| Executive | Management |
+| Technology Officer | Extraction Operations |
+| Planetary Operations | Extraction Operations |
+| Manager | Administration |
 
 All covariates except occupational categories ‘Management’ and ‘Spacecraft Operators’ were significant at 0.001.
 
@@ -365,19 +365,19 @@ To ensure both the probability mass of the lump sum payment and the continuous n
 To derive the severity distribution, first the benefit that would’ve been paid under the new proposed product was derived using the available historical data and information provided by CQMC. This entailed using CQMC average salaries by occupation and claim length to determine weekly payments. If an individual’s claim length was greater than 2 years, it was assumed the individual was permanently impaired and thus received the lump sum payment only.  
 
 The CQMC average salary assigned to each occupation in the historical data are outlined below. 
-| Historical Occupation | CQMC Salary | Additional Notes                                                      |
-|----------------------|--------------|------------------------------------------------------------------------|
-| Engineer             | 95000        |                                                                        |
-| Maintenance Staff    | 65000        |                                                                        |
-| Drill Operator       | 60000        |                                                                        |
-| Scientist            | 120000       |                                                                        |
-| Safety Officer       | 80000        |                                                                        |
-| Administrator        | 93750        | Average of HR, IT, Legal, and Finance & Accounting salaries           |
-| Spacecraft Operator  | 85000        | Average salary of navigation officers                                 |
-| Executive            | 500000       |                                                                        |
-| Technology Officer   | 75000        | Average salary of robotics technicians                                |
-| Planetary Operations | 81250        | Average salary across exploration and extraction operations           |
-| Manager              | 150000       | Average salary of Director                                            |
+| Historical Occupation | CQMC Salary | Additional Notes |
+|-----------------------|-------------|------------------|
+| Engineer | $95,000 | |
+| Maintenance Staff | $65,000 | |
+| Drill Operator | $60,000 | |
+| Scientist | $120,000 | |
+| Safety Officer | $80,000 | |
+| Administrator | $93,750 | Average of HR, IT, Legal, and Finance & Accounting salaries |
+| Spacecraft Operator | $85,000 | Average salary of navigation officers |
+| Executive | $500,000 | |
+| Technology Officer | $75,000 | Average salary of robotics technicians |
+| Planetary Operations | $81,250 | Average salary across exploration and extraction operations |
+| Manager | $150,000 | Average salary of Director |
 
 Under the new benefit scheme, weekly payments had a mean of $9172.21 and standard deviation of $25,318.33. As illustrated in the [histogram](Histogram_WC_New_Weekly_Benefit.png), the distribution was positively skewed with a median of $3077. The pareto distribution was deemed best suited to modelling weekly payments. The distribution produced the closest relative fit to empirical quantiles in [Q-Q plot](wc_pareto_qq_plot.png). A [comparison of the CDFs](wc_pareto_cdf_plot.png) demonstrates the heavy of the Pareto distribution. This is indicative of a conservative fit which is acceptable given no historical CQMC data was available. The other distributions considered and tested were Inverse Gamma, LogNormal, Weibull, Burr, Inverse Weibull, Pareto 1 and Gamma. 
 
@@ -482,12 +482,11 @@ For Equipment Failure, the target profit was 2.5%. This is a reasonable percenta
 ## Workers' Compensation
 The target profit was set at 2% due to CQMC’s investment in growing its safety team. The selected α, α=0.1, produced a final premium of $25,238,578 per year. Whilst this achieved a profit of 1.74%, it was deemed reasonable as aggregate losses were conservatively modelled. The final premium is considered affordable as it represents 0.17% of CQMC’s 2174 profit. The table below contains the present value of profit projections.
 
-| PV of Profit        | Lower Bound        | Expected           | Upper Bound        |
-|---------------------|-------------------|--------------------|--------------------|
-| Profit - 1 Year     | -$17,690,446.15   | $71,981.81         | $8,558,981.31      |
-| Profit - 3 Years    | -$37,703,487.92   | $28,776,747.29     | $37,729,153.54     |
-| Profit - 10 Years   | -$113,906,971.72  | $104,444,119.04    | $114,412,149.24    |
-
+| PV of Profit | Lower Bound | Expected | Upper Bound |
+| :--- | :--- | :--- | :--- |
+| Profit - 1 Year | -$17,690,446.15  | $71,981.81 | $8,558,981.31 |
+| Profit - 3 Years | -$37,703,487.92 | $28,776,747.29 | $37,729,153.54 |
+| Profit - 10 Years | -$113,906,971.72 | $104,444,119.04 | $114,412,149.24 |
 
 ## Aggregate Profit Projections
 > All calculations for the Aggregate Profit Projections were performed [here](Aggregate_Profit_Projections.xlsx).
