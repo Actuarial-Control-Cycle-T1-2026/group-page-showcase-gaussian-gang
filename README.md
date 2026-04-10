@@ -314,7 +314,144 @@ for (i in seq(1,1000000,1)) {
 ```
 
 ## Workers' Compensation Analysis
-(talk about the code and key findings from the frequency, severity and GLM distribution fitting)
+>The entire code used to select the best fitting frequency and severity distributions and create the final aggregate loss distribution for Workers Compensation can be found [here]().
+
+**Claims Frequency**
+Similar to equipment failure and business interruption, the frequency of historical Workers Compensation claims was slightly over dispersed with a mean of 0.142 and variance of the 0.144. As illustrated in the [histogram](), majority of policies never make a claim and for a single policy the maximum claim count was 2. Negative binomial distribution was deemed most appropriate as the fitted distribution produced a p-value of 0.987 under the chi-square goodness of fit test indicating no evidence against the null hypothesis; the fitted distribution is identical to the empirical. In addition to Negative Binomial, the Poisson distribution was fitted to assess its suitability for modelling claims frequency.  
+
+The code for fitting and testing the Negative Binomial Distribution is below. 
+```{r}
+# General variables 
+f <- as.vector(workers_comp_freq$claim_count)
+obs_freq <- table(f)
+x_vals <- as.numeric(names(obs_freq))
+
+# Negative Binomial 
+nbin_fitted <- fitdist(f, "nbinom", method = "mle")
+
+size_fitted <- nbin_fitted$estimate["size"]
+mu_fitted <- nbin_fitted$estimate["mu"]
+
+# Chi Square Test: Goodness of Fit for Negative Binomial 
+prob_nbinom <- dnbinom(x_vals,
+                       size = size_fitted,
+                       mu = mu_fitted)
+chisq.test(obs_freq,
+           p = prob_nbinom, 
+           rescale.p = TRUE) # p-value of 0.9873
+```
+
+A negative binomial GLM was fitted to the frequency data using the covariates of occupation category and gravity level. This required mapping occupations recorded in the history data to CQMC departments. The mapping is outlined in the table below. 
+| Historical Occupation   | CQMC Department        |
+|------------------------|------------------------|
+| Engineer               | Extraction Operations  |
+| Maintenance Staff      | Extraction Operations  |
+| Drill Operator         | Extraction Operations  |
+| Scientist              | Exploration Operations |
+| Safety Officer         | Environmental & Safety |
+| Administrator          | Administration         |
+| Spacecraft Operator    | Spacecraft Operations  |
+| Executive              | Management             |
+| Technology Officer     | Extraction Operations  |
+| Planetary Operations   | Extraction Operations  |
+| Manager                | Administration         |
+
+All covariates except occupational categories ‘Management’ and ‘Spacecraft Operators’ were significant at 0.001.
+
+**Claims Severity**
+To ensure both the probability mass of the lump sum payment and the continuous nature of weekly payments was captured, a mixed distribution approach was taken to model claim severity.
+
+To derive the severity distribution, first the benefit that would’ve been paid under the new proposed product was derived using the available historical data and information provided by CQMC. This entailed using CQMC average salaries by occupation and claim length to determine weekly payments. If an individual’s claim length was greater than 2 years, it was assumed the individual was permanently impaired and thus received the lump sum payment only.  
+
+The CQMC average salary assigned to each occupation in the historical data are outlined below. 
+| Historical Occupation | CQMC Salary | Additional Notes                                                      |
+|----------------------|--------------|------------------------------------------------------------------------|
+| Engineer             | 95000        |                                                                        |
+| Maintenance Staff    | 65000        |                                                                        |
+| Drill Operator       | 60000        |                                                                        |
+| Scientist            | 120000       |                                                                        |
+| Safety Officer       | 80000        |                                                                        |
+| Administrator        | 93750        | Average of HR, IT, Legal, and Finance & Accounting salaries           |
+| Spacecraft Operator  | 85000        | Average salary of navigation officers                                 |
+| Executive            | 500000       |                                                                        |
+| Technology Officer   | 75000        | Average salary of robotics technicians                                |
+| Planetary Operations | 81250        | Average salary across exploration and extraction operations           |
+| Manager              | 150000       | Average salary of Director                                            |
+
+Under the new benefit scheme, weekly payments had a mean of $9172.21 and standard deviation of $25,318.33. As illustrated in the [histogram](), the distribution was positively skewed with a median of $3077. The pareto distribution was deemed best suited to modelling weekly payments. The distribution produced the closest relative fit to empirical quantiles in [Q-Q plot](). The heavy tail is indicative of a conservative fit which is acceptable given no historical CQMC data was available. The other distributions considered and tested were Inverse Gamma, LogNormal, Weibull, Burr, Inverse Weibull, Pareto 1 and Gamma. 
+
+A sample of teh code for testing the Pareto distribution is below. 
+```{r}
+# Pareto Distribution 
+pareto_fit <- fitdist(x, "pareto", method = "mle")
+
+# Fitted Distribution 
+pareto_shape_fitted <- pareto_fit$estimate["shape"]
+pareto_scale_fitted <- pareto_fit$estimate["scale"]
+
+# KS Test 
+pareto_ks <- ks.test(x, "ppareto", shape = pareto_shape_fitted, scale = pareto_scale_fitted)
+pareto_ks$p.value #1.47064e-211
+
+# Other metrics 
+gofstat(pareto_fit)
+
+# Q-Q Test
+qqcomp(pareto_fit)
+qqcomp(pareto_fit, xlogscale = TRUE, ylogscale = TRUE)
+qqcomp(pareto_fit, xlim = c(0,100000))
+```
+A pareto GLM was fitted using occupation category as a covariate. All categories except ‘Exploration Operations’ and ‘Management’ where significant at 0.05.
+
+The claim type distribution was Bernoulli with a probability of 0.029 for a lump sum claim. This probability represents the proportion of permanent impairment injuries in the historical data with a 10% increase to account for the risk of death. No deaths were recorded in the historical data. 
+
+**Aggregate Distribution**
+The derive the aggregate loss distirbution for Workers' Compensation, first the frequency and severity GLMs were fitted to CQMC's exposure. CQMC's exposure was calculated from the personnel data provided by the firm. The frequency of claims for each operation area (Helionis Cluster, Bayesia Cluster, Oryn Delta and headquarters) was then simulated 1,000,000 and the severity of each claim was estimated using the fitted GLMs. To derive the severity of each claim a uniform random value between 0 and 1 was generated, if the value was less than the probability of permanent impairment or death the loss was set to $754,000 (lump sum payment) otherwise the loss was determined by the fitted GLM (weekly payments). 
+
+The code to simulate the aggregate loss distribution is included below. 
+```{r}
+set.seed(1)
+
+for(i in 1:100000){
+  
+  # simulate claim counts for each risk cell
+  claimFreq <- mapply(
+    rnbinomFunc,
+    predictorDf$no_employees,
+    predictorDf$mu_freq,
+    predictorDf$size_freq
+  )
+  
+  portfolio_loss <- 0
+  
+  # loop over risk cells
+  for(k in 1:nrow(predictorDf)){
+    
+    if(claimFreq[k] > 0){
+      
+      for(j in 1:claimFreq[k]){
+          
+          if(runif(1) < pi_weighting){
+            
+            portfolio_loss <- portfolio_loss + 754000
+            
+          } else {
+            
+            sev <- rparetoFunc(
+              1,
+              predictorDf$alpha_sev[k],
+              predictorDf$theta_sev[k]
+            )
+            
+            portfolio_loss <- portfolio_loss + sev
+          }
+        }
+      }
+    }
+  totalLosses[i] <- portfolio_loss
+}
+``
+The [aggregate loss distribution]() produced an expected value of $24,807,746 and a standard deviation of $4,308,317. The distribution is roughly a bell-shaped curve, with light tails which are attributable to the proposed limitations on claim length and payments. The 99% VaR, $35,438,000, was within 3 standard deviations of the mean. 
 
 # Pricing 
 The premiums for each hazard were calculated using the standard deviation principle, $\mu + \alpha*\sigma$, where μ is the average loss, calculated from the empirical aggregate loss distribution, σ is the standard deviation of the loss distribution, and α was selected to achieve a given profit as a percentage of total average losses. This method accounts for risk and affordability by targeting a small percentage of profit. Premiums increase proportionally to increases in exposure and will increase annually in line with expected inflation. Premiums will be continually monitored and refined with experience, as it is not GGIC’s intent to unreasonably exploit risk. Any data collected in this process will be stored securely to avoid sensitive leakage.
@@ -341,6 +478,15 @@ For Equipment Failure, the target profit was 2.5%. This is a reasonable percenta
 | Profit - 10 Years | -$47,916,718.29 | $23,682,493.62 | $93,504,385.02 |
 
 ## Workers' Compensation
+The target profit was set at 2% due to CQMC’s investment in growing its safety team. The selected α, α=0.1, produced a final premium of $25,238,578 per year. Whilst this achieved a profit of 1.74%, it was deemed reasonable as aggregate losses were conservatively modelled. The final premium is considered affordable as it represents 0.17% of CQMC’s 2174 profit. The table below contains the present value of profit projections.
+
+| PV of Profit        | Lower Bound        | Expected           | Upper Bound        |
+|---------------------|-------------------|--------------------|--------------------|
+| Profit - 1 Year     | -$17,690,446.15   | $71,981.81         | $8,558,981.31      |
+| Profit - 3 Years    | -$37,703,487.92   | $28,776,747.29     | $37,729,153.54     |
+| Profit - 10 Years   | -$113,906,971.72  | $104,444,119.04    | $114,412,149.24    |
+
+
 ## Aggregate Profit Projections
 
 
