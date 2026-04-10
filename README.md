@@ -317,7 +317,8 @@ for (i in seq(1,1000000,1)) {
 >The entire code used to select the best fitting frequency and severity distributions and create the final aggregate loss distribution for Workers Compensation can be found [here]().
 
 **Claims Frequency**
-Similar to equipment failure and business interruption, the frequency of historical Workers Compensation claims was slightly over dispersed with a mean of 0.142 and variance of the 0.144. As illustrated in the [histogram](), majority of policies never make a claim and for a single policy the maximum claim count was 2. Negative binomial distribution was deemed most appropriate as the fitted distribution produced a p-value of 0.987 under the chi-square goodness of fit test indicating no evidence against the null hypothesis; the fitted distribution is identical to the empirical. In addition to Negative Binomial, the Poisson distribution was fitted to assess its suitability for modelling claims frequency.  
+
+Similar to equipment failure and business interruption, the frequency of historical Workers Compensation claims was slightly over dispersed with a mean of 0.142 and variance of the 0.144. As illustrated in the [histogram](Histogram_of_WC_Frequency.png), majority of policies never make a claim and for a single policy the maximum claim count was 2. Negative binomial distribution was deemed most appropriate as the fitted distribution produced a p-value of 0.987 under the chi-square goodness of fit test indicating no evidence against the null hypothesis; the fitted distribution is identical to the empirical. In addition to Negative Binomial, the Poisson distribution was fitted to assess its suitability for modelling claims frequency.  
 
 The code for fitting and testing the Negative Binomial Distribution is below. 
 ```{r}
@@ -359,6 +360,7 @@ A negative binomial GLM was fitted to the frequency data using the covariates of
 All covariates except occupational categories ‘Management’ and ‘Spacecraft Operators’ were significant at 0.001.
 
 **Claims Severity**
+
 To ensure both the probability mass of the lump sum payment and the continuous nature of weekly payments was captured, a mixed distribution approach was taken to model claim severity.
 
 To derive the severity distribution, first the benefit that would’ve been paid under the new proposed product was derived using the available historical data and information provided by CQMC. This entailed using CQMC average salaries by occupation and claim length to determine weekly payments. If an individual’s claim length was greater than 2 years, it was assumed the individual was permanently impaired and thus received the lump sum payment only.  
@@ -378,9 +380,9 @@ The CQMC average salary assigned to each occupation in the historical data are o
 | Planetary Operations | 81250        | Average salary across exploration and extraction operations           |
 | Manager              | 150000       | Average salary of Director                                            |
 
-Under the new benefit scheme, weekly payments had a mean of $9172.21 and standard deviation of $25,318.33. As illustrated in the [histogram](), the distribution was positively skewed with a median of $3077. The pareto distribution was deemed best suited to modelling weekly payments. The distribution produced the closest relative fit to empirical quantiles in [Q-Q plot](). The heavy tail is indicative of a conservative fit which is acceptable given no historical CQMC data was available. The other distributions considered and tested were Inverse Gamma, LogNormal, Weibull, Burr, Inverse Weibull, Pareto 1 and Gamma. 
+Under the new benefit scheme, weekly payments had a mean of $9172.21 and standard deviation of $25,318.33. As illustrated in the [histogram](Histogram_WC_New_Weekly_Benefit.png), the distribution was positively skewed with a median of $3077. The pareto distribution was deemed best suited to modelling weekly payments. The distribution produced the closest relative fit to empirical quantiles in [Q-Q plot](wc_pareto_qq_plot.png). A [comparison of the CDFs](wc_pareto_cdf_plot.png) demonstrates the heavy of the Pareto distribution. This is indicative of a conservative fit which is acceptable given no historical CQMC data was available. The other distributions considered and tested were Inverse Gamma, LogNormal, Weibull, Burr, Inverse Weibull, Pareto 1 and Gamma. 
 
-A sample of teh code for testing the Pareto distribution is below. 
+A sample of the code for testing the Pareto distribution is below. 
 ```{r}
 # Pareto Distribution 
 pareto_fit <- fitdist(x, "pareto", method = "mle")
@@ -406,6 +408,7 @@ A pareto GLM was fitted using occupation category as a covariate. All categories
 The claim type distribution was Bernoulli with a probability of 0.029 for a lump sum claim. This probability represents the proportion of permanent impairment injuries in the historical data with a 10% increase to account for the risk of death. No deaths were recorded in the historical data. 
 
 **Aggregate Distribution**
+
 The derive the aggregate loss distirbution for Workers' Compensation, first the frequency and severity GLMs were fitted to CQMC's exposure. CQMC's exposure was calculated from the personnel data provided by the firm. The frequency of claims for each operation area (Helionis Cluster, Bayesia Cluster, Oryn Delta and headquarters) was then simulated 1,000,000 and the severity of each claim was estimated using the fitted GLMs. To derive the severity of each claim a uniform random value between 0 and 1 was generated, if the value was less than the probability of permanent impairment or death the loss was set to $754,000 (lump sum payment) otherwise the loss was determined by the fitted GLM (weekly payments). 
 
 The code to simulate the aggregate loss distribution is included below. 
@@ -451,7 +454,7 @@ for(i in 1:100000){
   totalLosses[i] <- portfolio_loss
 }
 ```
-The [aggregate loss distribution]() produced an expected value of $24,807,746 and a standard deviation of $4,308,317. The distribution is roughly a bell-shaped curve, with light tails which are attributable to the proposed limitations on claim length and payments. The 99% VaR, $35,438,000, was within 3 standard deviations of the mean. 
+The [aggregate loss distribution](wc_total_loss_dist.png) produced an expected value of $24,807,746 and a standard deviation of $4,308,317. The distribution is roughly a bell-shaped curve, with light tails which are attributable to the proposed limitations on claim length and payments. The 99% VaR, $35,438,000, was within 3 standard deviations of the mean. 
 
 # Pricing 
 The premiums for each hazard were calculated using the standard deviation principle, $\mu + \alpha*\sigma$, where μ is the average loss, calculated from the empirical aggregate loss distribution, σ is the standard deviation of the loss distribution, and α was selected to achieve a given profit as a percentage of total average losses. This method accounts for risk and affordability by targeting a small percentage of profit. Premiums increase proportionally to increases in exposure and will increase annually in line with expected inflation. Premiums will be continually monitored and refined with experience, as it is not GGIC’s intent to unreasonably exploit risk. Any data collected in this process will be stored securely to avoid sensitive leakage.
