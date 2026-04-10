@@ -29,8 +29,6 @@ Throughout the data cleaning, we have relied upon the data description as a sour
 
 The data cleaning code can be found here for [Cargo Loss](CargoLoss_Data_cleaning.R), [Business Interruption](Business_Interruption-Data_Cleaning_and_EDA.R), [Equipment Failure](Equipment_Failure-Data_Cleaning_and_EDA.R) and [Workers' Compensation](Workers_Compensation_Data_Cleaning_and_EDA.R).
 
-^REQUIRE DATA CLEANING CODE FOR CL 
-
 # Risk Assessment
 (discuss our risk section)
 
