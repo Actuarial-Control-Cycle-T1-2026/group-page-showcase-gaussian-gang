@@ -314,7 +314,7 @@ for (i in seq(1,1000000,1)) {
 ```
 
 ## Workers' Compensation Analysis
->The entire code used to select the best fitting frequency and severity distributions and create the final aggregate loss distribution for Workers Compensation can be found [here]().
+>The entire code used to select the best fitting frequency and severity distributions and create the final aggregate loss distribution for Workers Compensation can be found [here](Workers_Compensation_Model_Selection_and_Pricing.R).
 
 **Claims Frequency**
 
@@ -496,7 +496,11 @@ The target profit was set at 2% due to CQMC’s investment in growing its safety
 # Stress Testing
 (describe our stress testing scenarios and calculations)
 
-## Scenario 1: 
+## Scenario 1: Multi-system communication outage
+In the year 2175, CQMC experiences a major successful cyberattack that results in a systems-wide communication blackout. The was previously deemed extremely rare by management and is considered a 1 in 250-year event. Operations cease immediately for 3-days whilst negotiations are undertaken to restore the connection. Without communication, collisions occur, cargo and equipment are destroyed and damaged, workers are seriously/fatally injured and regular business operations are interrupted. Across the hazard types, this event represents different levels of severity. For WC, this is a 1 in 250-year event, however, for BI, this is considered less extreme as other events could lead to similar outcomes. Therefore, for BI this is a 1 in 200-year event. Conversely, numerous, simultaneous collisions is considered extremely rare, a 1 in 350-year event, for CL. It’s noted that cyberattacks are excluded for EF. It’s estimated such event will lead to $135,611,130.84 worth of additional claims and GGIC’s expected projected profit of $147m would decline by 92%. GGIC’s resilience without any accumulated reserves can be attributed to its sustainable product design. It’s likely that without the EF exclusion, GGIC would experience a catastrophic loss. 
+
+The full workings for this scenario are located [here](Scenario_Test1.xlsx). 
+
 ## Scenario 2: Management Response to Poor Financial Conditions
 In 2178 there is an unexpected spike in inflation. GGIC has increased their premiums in line with expected inflation, but claims costs increase in line with true inflation. CQMC takes extensive cost-cutting measures, at the expense of equipment and infrastructure maintenance, and outsources core business activities. This causes increases to the expected losses from BI and EF, because there is increased third-party operational risk due to reliance on vendors, and the lack of maintenance has made CQMC’s equipment more prone to breakdowns, which may eventually increase the risk of worker injury.  
 
