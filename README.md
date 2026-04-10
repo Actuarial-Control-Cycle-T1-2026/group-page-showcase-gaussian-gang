@@ -30,24 +30,7 @@ Throughout the data cleaning, we have relied upon the data description as a sour
 The data cleaning code can be found here for [Cargo Loss](CargoLoss_Data_cleaning.R), [Business Interruption](Business_Interruption-Data_Cleaning_and_EDA.R), [Equipment Failure](Equipment_Failure-Data_Cleaning_and_EDA.R) and [Workers' Compensation](Workers_Compensation_Data_Cleaning_and_EDA.R).
 
 # Risk Assessment
-
-This section assesses the risks inherent to the nature and location of CQMC’s operations. 
-
-**Key differences in risk profile across solar systems**
-
-HC has low solar flare activity and predictable solar winds, which reduces the likelihood of multi-asset radiation related claims. The primary risk is the asteroid clusters, which can lead to navigational and communication disruptions. BS experiences greater levels of solar radiation, which increases the likelihood of radiation related injuries, as well as electrical damage to cargo and equipment. The inner planet’s thin magnetosphere reduces protection. OD presents the greatest tail risk. Low luminosity and unpredictable asteroids threaten cargo, vessels and personnel.  Equipment and personnel are targeted by radiation.  
-
-**Correlated Risk Scenarios**
-
-Scenario 1 - Asteroid collision into cargo during travel. This will result in loss or damaging of cargo and injury or death to personnel.  
-
-Scenario 2 - Large scale solar activity, resulting in high doses of radiation. This will impact electrical systems, resulting in EF and navigation disruption for cargo. Employee health also harmed.
-
-Scenario 3 - Contractionary macroeconomic conditions. This will impact CQMC through higher interest rates and reduced production/revenue.
-
-**Identification and ranking of risks by hazard area across solar systems**
-
-**Scenario Testing**
+A qualitative approach was taken to assessing the risks inherent to the nature and location of CQMC's operations. By analysisng the information provided, we were able to identify key differences in the risk profile of each solar system. To identify risks by hazard area, we considered how the unique features of each system would shape interactions between personnel, equipment, resources and the environment. Due to data limitations we were unable to quantify the probability of certain events (e.g. asteroid collision with cargo ship) and hence we decided to relatively rank risks by likelihood based on the information provided. The list of risks identified for each hazard area is by no means exhaustive however the risks presented in the report, in our opinion, were essential to consider when designing and pricing our proposed products. 
 
 # Distribution Selection
 The following sections detail the distribution selection process for each hazard. To select the most appropriate distributions for claim frequency and severity, several distributions were naively fitted using MLE and compared against historical claims data using a range of statistical methods, including empirical CDFs, P-P plots and AIC comparisons. The selected distributions were then used to fit GLMs, so that CQMC's current risks and exposures were considered, with an exposure offset equal to 1. Frequency and severity distributions were combined to create an aggregate loss distribution.
