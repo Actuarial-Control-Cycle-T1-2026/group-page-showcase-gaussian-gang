@@ -494,8 +494,6 @@ The target profit was set at 2% due to CQMC’s investment in growing its safety
 
 
 # Stress Testing
-(describe our stress testing scenarios and calculations)
-
 ## Scenario 1: Multi-system communication outage
 In the year 2175, CQMC experiences a major successful cyberattack that results in a systems-wide communication blackout. The was previously deemed extremely rare by management and is considered a 1 in 250-year event. Operations cease immediately for 3-days whilst negotiations are undertaken to restore the connection. Without communication, collisions occur, cargo and equipment are destroyed and damaged, workers are seriously/fatally injured and regular business operations are interrupted. Across the hazard types, this event represents different levels of severity. For WC, this is a 1 in 250-year event, however, for BI, this is considered less extreme as other events could lead to similar outcomes. Therefore, for BI this is a 1 in 200-year event. Conversely, numerous, simultaneous collisions is considered extremely rare, a 1 in 350-year event, for CL. It’s noted that cyberattacks are excluded for EF. It’s estimated such event will lead to $135,611,130.84 worth of additional claims and GGIC’s expected projected profit of $147m would decline by 92%. GGIC’s resilience without any accumulated reserves can be attributed to its sustainable product design. It’s likely that without the EF exclusion, GGIC would experience a catastrophic loss. 
 
@@ -591,40 +589,24 @@ This scenario considers an extreme macroeconomic environment, where inflation an
 In the table above, there is significant damage to average profit during an extreme inflation environment. The average 10 year profit falls from $1.6 billion to -$5.4 billion. In addition to this, the range increases to [-44 billion, 40 billion], which exposes GGIC to significantly more risk.
 
 # Assumptions
-(repeat of assumptions section from report)
+> A variety of assumptions were used to create the products, the prices and the projections. A selection of the most pricing-focused assumptions are shown below.
+
+**The data description is a source of truth.** The data description provided is assumed to be an accurate representation of the data received. To maintain internal consistency, a single source of truth was identified. As the data description was created by someone with experience with the data set at a single point in time, there is less room for error than in the entire dataset. Therefore, when cleaning data and encountering data that contradicts the descriptions within the data description, assume that the data description is correct and edit the data. This assumption can be updated by communicating data concerns to the client to confirm whether or not the data is accurate.  
+
+**Cashflow timings are regular and annual.** It is assumed that premiums are received at the beginning of each year and that claims are made, on average, in the middle of each year and are paid out immediately. These are typical simplifying assumptions within general insurance, even though claims would realistically occur throughout the year and be paid out over weeks or months. Therefore, premiums will be increased annually for inflation and exposure growth. There will be six months’ interest received on the premiums and retained profits before claims are paid out. The profit will then gain six months’ interest. This assumption can be updated by monitoring policy renewal times, claim notification times, and claim payout times to check whether these cause a material difference in profit projections. 
+
+**CQMC growth is linear and exactly as expected.** It is assumed that CQMC growth is exactly as described in the summary of their expansion plans and is achieved linearly over the 10 year span. Given the extensive time and resources that would need to be employed to achieve the desired growth rate, it is a realistic and simple assumption that the growth would happen in continual, progressive stages. Therefore, when calculating premiums and costs, assume that the coverage exposure increases at a linear rate which is indicative of the expected growth of CQMC. This assumption can be updated by monitoring CQMC’s annual progress on the expansion and keeping abreast of whether plans for growth are being extended or scaled back. 
+
+**Inflation and interest rates remain stable throughout each year.** This simplifying assumption makes it logical for a yearly inflation figure to be used to represent annual and half-yearly inflation. This assumption can be updated in line with true economic experience and emerging inflation trends.  
+
+**Inflation is a mean-reverting process.** This was assumed because governments tend to guide inflation to a 2-3% target range, so the forecasted rate of inflation for the following 10 years was set to a mean-reverting process anchored around 2.5%. This assumption can be reviewed as the government releases new information around inflation targets. 
+
+**The overnight lending rate and risk-free rate act in response to inflation.** The forecasted overnight lending rate and risk-free rate were determined by conducting a linear regression, with the rate of inflation as a predictor. Cash flows are then discounted according to the forecasted yield curve. This assumption can be compared with the actual yield curve to review whether this assumption reflects reality or if it needs to be adjusted.  
+
+**The 10-year risk free rate incorporates a “premium” due to the length of time until maturity.** The premium for the 1 through 10 year risk-free rates incorporate a premium that increases linearly with time until maturity. The premium is capped at the average difference between the 1 year and 10 year risk-free rate. 
 
 # Data
 (repeat of data section from report)
 
 # Final Recommendations
 We recommend that GGIC offer CQMC the products outlined within the report, to cover the four hazards that CQMC faces across HC, BS and OD. These products have been designed to reflect the unique risks and resources of each solar system and have been priced such that they are affordable for CQMC, yet profitable for GGIC. Assumptions, risk appetites and pricing should be continually monitored into the future to ensure that this product remains valuable for both parties.  
-
-
-
-
-
-
-
-
-
-
-_"Tell me and I forget. Teach me and I remember. Involve me and I learn." – Benjamin Franklin_
-
----
-
-### Congrats on completing the [2026 SOA Research Challenge](https://www.soa.org/research/opportunities/2026-student-research-case-study-challenge/)!
-
-
-> Now it's time to build your own website to showcase your work.  
-> Creating a website using GitHub Pages is simple and a great way to present your project.
-
-This page is written in Markdown.
-- Click the [assignment link](https://classroom.github.com/a/FxAEmrI0) to accept your assignment.
-
----
-
-> Be creative! You can embed or link your [data](player_data_salaries_2020.csv), [code](sample-data-clean.ipynb), and [images](ACC.png) here.
-
-More information on GitHub Pages can be found [here](https://pages.github.com/).
-
-![](Actuarial.gif)
