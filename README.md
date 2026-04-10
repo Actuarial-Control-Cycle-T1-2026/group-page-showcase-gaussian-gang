@@ -1,4 +1,4 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/FxAEmrI0)
+<img width="468" height="29" alt="image" src="https://github.com/user-attachments/assets/4bee9a1f-70c4-49f2-84c5-b5fda048155c" />[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/FxAEmrI0)
 # Actuarial Theory and Practice A Assignment - 2026 SOA Research Challenge
 _by Sophie Vonwiller, Matthew Vucic and Savannah Worth_
 
@@ -39,11 +39,13 @@ The following sections detail the distribution selection process for each hazard
 
 ## Cargo Loss Analysis
 
-For claim frequency, the mean was 0.25 claims, and variance was 0.36. The best fitting distribution was Negative Binomial. A histogram of the data shows that a large majority of policies never make a claim, and the amount of claims made decreases at a decreasing rate. A negative binomial distribution, known to handle over-dispersed data, was the best-fitting distribution. Other distributions tested include Binomial and Poisson. 
-
-A negative binomial GLM was then fit to the frequency data. For the negative binomial GLM, the statistically significant variables were pilot experience, route type, cargo value, and weight. 
+The code for cleaning and modelling Cargo Loss insurance is available here {}: 
 
 **Claims Frequency**
+
+For claim frequency, the mean was 0.25 claims, and variance was 0.36. The best fitting distribution was Negative Binomial. A histogram of the data shows that a large majority of policies never make a claim, and the amount of claims made decreases at a decreasing rate. A negative binomial distribution, known to handle over-dispersed data, was the best-fitting distribution. Other distributions tested include Binomial and Poisson. The AIC and BIC for the Negative Binomial were the lowest of all distributions, at 149830.8 and 149850.2 respectively. The goodness of fit plots are available here, where it is clear that the Negative Binomial fits the emperical cdf and theoretical distribution of the data well {}.
+
+A negative binomial GLM was then fit to the frequency data. For the negative binomial GLM, the statistically significant variables were pilot experience, route type, cargo value, and weight. It produced an AIC of 173900, and the goodness of fit plots are examinable here {}.
 
 A sample of the code for testing the Negative Binomial distribution is below.
 ```{r}
@@ -60,11 +62,9 @@ frequencyModel <- glm.nb(claim_count ~ container_type + pilot_experience + route
 ```
 **Claims Severity**
 
-**Claims Frequency**
+For claim severity, the mean was $7,788,328, and standard deviation was $22, 859, 713. The log normal distribution was chosen. A series of distributions were fit to the severity data, including the log normal, pareto, inverse gamme, gamma, weibull and exponential. Whilst the inverse gamma and gamma produced more optimal fits due to the extreme heavy tail of the distribution, their produced parameters resulted in infinite means for claim severity. As a result, the log normal distribution was selected producing an AIC of 894925.5, and BIC of 894842.5.  The KS test statistic p-value was 0.09, which is above 0.05, suggesting that the data fits this distribution. The goodness of fit plots are examinable here {}, which displays that the lognormal conforms with the theoretical cdf and p-p plot. The reason that the q-q plot deviates from the diagonal is due to the inability to capture the extremely heavy tail of the distribution. 
 
-For claim severity, the mean was $7,788,328, and standard deviation was $22, 859, 713. The log normal distribution was chosen. 
-
-A log-normal GLM was then fit to the cargo loss severity data. The statistically significant variables for the log normal GLM were max weight, solar radiation, debris density, and route risk. 
+A log-normal GLM was then fit to the cargo loss severity data. The statistically significant variables for the log normal GLM were max weight, solar radiation, debris density, and route risk. This produced an AIC of 128900, and the goodness of fit plots are examinable here {}.
 
 A sample of the code for testing the Lognormal distribution is below.
 ```{r}
@@ -86,6 +86,8 @@ To simulate the aggregate loss distribution for Cargo Loss, the exposure for CQM
 For each system, the parameters for the GLMs of both frequency and severity were then predicted, using the estimated features. Following this, using monte carlo simulation, the frequency was simulated for each policy (i.e., each container within each solar system), followed by the severity of each of the simulated claims. Summing the results provides the total loss distribution, which is displayed here.
 
 The total loss distribution produced had a mean loss of $14,084,596,613 and a standard deviation of $1,696,016,956. The total loss is slightly positively skewed, with a median of $1,696,016,956. The 95% VaR is $16,991,852,635 and the expected shortfall above the 99th percentile is $19,089,376,617.  
+
+The plot for the total loss distribution is examinable here {}.
 
 A sample of the code for the aggregate loss distribution is visible below.
 ```{r}
