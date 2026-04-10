@@ -448,6 +448,8 @@ prem <- mean + 0.05*sd
 (6290203/1000000)/61491*100
 #Which 0.01% of CQMC's total profit in 2174
 
+# Scenario 1 99.5th percentile loss
+quantile(totalLosses, probs=0.995)
 
 ##Stress Test 2##
 #Maintenance Frequency has halved
