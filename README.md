@@ -344,7 +344,7 @@ chisq.test(obs_freq,
 A negative binomial GLM was fitted to the frequency data using the covariates of occupation category and gravity level. This required mapping occupations recorded in the history data to CQMC departments. The mapping is outlined in the table below. 
 
 | Historical Occupation | CQMC Department |
-| :---: | :---: |
+| :--- | :--- |
 | Engineer | Extraction Operations |
 | Maintenance Staff | Extraction Operations |
 | Drill Operator | Extraction Operations |
@@ -367,7 +367,7 @@ To derive the severity distribution, first the benefit that would’ve been paid
 
 The CQMC average salary assigned to each occupation in the historical data are outlined below. 
 | Historical Occupation | CQMC Salary | Additional Notes |
-| :---: | :---: | :---: |
+| :--- | :--- | :--- |
 | Engineer | $95,000 | - |
 | Maintenance Staff | $65,000 | - |
 | Drill Operator | $60,000 | - |
