@@ -463,6 +463,14 @@ The premiums for each hazard were calculated using the standard deviation princi
 After premiums have been selected, final profits were caculated in a [spreadsheet](Aggregate_Profit_Projections.xlsx) combining all four hazards. To calculate this, we assumed that premiums were all received at the beginning of the year, claims were received in the middle of the year on average and claims are immediately paid out. We also estimated inflation and interest rates using a mean regression. The final profit was a sum of retained earnings + annually inflated premiums + half a year of interest on premium and retained profit + inflated claims losses + half a year of interest on the remaining profit.
 
 ## Cargo Loss
+For Cargo Loss, the target profit was 4%. This profit was chosen to meet GGIC's costs of doing business, plus provide some profits. The α which is suitable for this profit target is α=0.42. As Cargo Loss has a mean total loss of $14,084,596,613 and a standard deviation of $1,696,016,956, this produced a final premium of $14,788,826,443 per year, based on current risks, exposures and economic conditions. The table below contains the present value of profit projections for GICC, including the value of profit if claims are made at the mean and a 95% probability range for claims losses.
+
+| PV of Profit | Lower Bound | Expected | Upper Bound |
+|---|---|---|---|
+| Profit - 1 Year | -$2,449,676,958 | $142,838,386 | -$3,186,426,422 |
+| Profit - 3 Years | -$7,499,406,560 | $446,552,520 | $9,775,031,927 |
+| Profit - 10 Years | -$24,818,259,704 | $1,593,843,184 | $26,601,397,509 |
+
 ## Business Interruption
 For Business Interruption ,the target profit was 3%. This profit was chosen to meet GGIC's costs of doing business, plus provide some profits. The α which is suitable for this profit target is α=0.05. As business interruption has a mean total loss of $6,105,802 and a standard deviation of $3,688,022, this produced a final premium of $6,290,203 per year, based on current risks, exposures and economic conditions. This premium makes up 0.01% of CQMC’s total profit in 2174, so it is extremely inexpensive. The table below contains the present value of profit projections for GICC, including the value of profit if claims are made at the mean and a 95% probability range for claims losses.
 
